@@ -1,6 +1,5 @@
 package com.IV1201VT221.IV1201.controller;
 
-
 import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
 import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
 import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
@@ -15,7 +14,7 @@ public class Restcontroller {
     DatabaseService databaseservice;
 
     @Autowired
-    public Restcontroller(DatabaseService databaseservice){
+    public Restcontroller(DatabaseService databaseservice) {
         this.databaseservice = databaseservice;
     }
 
