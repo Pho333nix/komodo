@@ -2,12 +2,17 @@ package com.IV1201VT221.IV1201.dao;
 
 import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
 import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
+import com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException;
 import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
 import com.IV1201VT221.IV1201.model.Person;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -60,5 +65,20 @@ public class PersonDao implements PersonDaoInterface {
     @Override
     public int deletePerson(int id, Person person) {
         return 0;
+    }
+    /*
+    @param username The username to check for in the database
+    @return return the username is exists
+     */
+    @Override
+    public String getPerson(String username) throws UsernameNotFoundException {
+        String sqlGetUser = "SELECT email FROM person WHERE email = ?";
+        String uname = jdbcTemplate.queryForObject(sqlGetUser, new Object[] {username}, String.class);
+
+        if(uname.isEmpty() || uname == null){
+            throw new UsernameNotFoundException("");
+        }
+        return uname;
+
     }
 }

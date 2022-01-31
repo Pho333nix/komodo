@@ -3,6 +3,7 @@ package com.IV1201VT221.IV1201.service;
 import com.IV1201VT221.IV1201.dao.PersonDao;
 import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
 import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
+import com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException;
 import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
 import com.IV1201VT221.IV1201.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,9 @@ public class DatabaseService {
 
     public int insertPerson(Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
         return persondao.insertPerson(person);
+    }
+
+    public String getPerson(String username) throws UsernameNotFoundException{
+        return persondao.getPerson(username);
     }
 }
