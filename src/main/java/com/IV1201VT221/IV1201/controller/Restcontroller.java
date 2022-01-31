@@ -52,7 +52,7 @@ public class Restcontroller {
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
         try{
-            System.out.println("AUTHHHHHH");
+
             System.out.println(authenticationRequest.getUsername() + authenticationRequest.getPassword());
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
@@ -60,10 +60,10 @@ public class Restcontroller {
             );
 
         }catch(BadCredentialsException e){
-            System.out.println("BADCREDENTIALSO!=!=!");
+
             throw new Exception("incorrect credentials", e);
         }
-        System.out.println("KUKE ");
+
         final UserDetails userDetails = userDetailsService.loadUserByUsername(
                 authenticationRequest.getUsername()
         );

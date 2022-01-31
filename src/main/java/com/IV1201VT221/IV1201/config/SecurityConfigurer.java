@@ -27,13 +27,13 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().antMatchers("/auth").
                 permitAll().anyRequest().authenticated();
-        System.out.println("INTE HÄR");
+        
     }
 
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception{
-        System.out.println("FEL HÄR ELLER???");
+
         return super.authenticationManagerBean();
     }
 
