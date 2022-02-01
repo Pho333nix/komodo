@@ -73,12 +73,17 @@ public class PersonDao implements PersonDaoInterface {
     @Override
     public String getPerson(String username) throws UsernameNotFoundException {
         String sqlGetUser = "SELECT email FROM person WHERE email = ?";
-        String uname = jdbcTemplate.queryForObject(sqlGetUser, new Object[] {username}, String.class);
-
-        if(uname.isEmpty() || uname == null){
-            throw new UsernameNotFoundException("");
+        try{
+            String uname = jdbcTemplate.queryForObject(sqlGetUser, new Object[] {username}, String.class);
+            if(uname.isEmpty() || uname == null){
+                throw new UsernameNotFoundException("");
+            }
+            return uname;
+        }catch(Exception e){
+            System.out.println("USER NOT FOUND");
+            System.out.println(e);
+            return "";
         }
-        return uname;
 
     }
 }
