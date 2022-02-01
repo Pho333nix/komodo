@@ -26,7 +26,7 @@ export function SignIn(){
       <input type='text'  onChange={(e)=>{setPassword(e.target.value)}}/>
     </label>
   </form>
-  <button onClick={()=>{dispatch(signIn({name: userName.val, passwd:passWord.val}))}}>submit</button>
+  <button onClick={()=>{dispatch(signIn({name: userName.val, passwd:passWord.val}))}}>Log in</button>
 </div>);
 
 }
