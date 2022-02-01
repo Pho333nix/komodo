@@ -13,4 +13,5 @@ public interface PersonDaoInterface {
     int updatePerson(int id, Person person);
     int deletePerson(int id, Person person);
     String getPerson(String username) throws UsernameNotFoundException;
+    String[] getCredentials(String username) throws UsernameNotFoundException;
 }

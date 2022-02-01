@@ -39,6 +39,15 @@ public class Restcontroller {
         return databaseservice.getPerson(username);
     }
 
+    @RequestMapping(value = "/api/cred/{username}", method = RequestMethod.GET)
+    public String[] getCred(@PathVariable String username) throws UsernameNotFoundException {
+        String[] cred = new String[2];
+        cred = databaseservice.getCredentials(username);
+        System.out.println(cred[0]);
+        System.out.println(cred[1]);
+        return cred;
+    }
+
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
     public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
         return databaseservice.insertPerson(person);
@@ -53,7 +62,7 @@ public class Restcontroller {
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
         try{
 
-            System.out.println(authenticationRequest.getUsername() + authenticationRequest.getPassword());
+            
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
                             authenticationRequest.getPassword())

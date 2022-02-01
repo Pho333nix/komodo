@@ -27,4 +27,8 @@ public class DatabaseService {
     public String getPerson(String username) throws UsernameNotFoundException{
         return persondao.getPerson(username);
     }
+
+    public String[] getCredentials(String username) throws UsernameNotFoundException{
+        return persondao.getCredentials(username);
+    }
 }
