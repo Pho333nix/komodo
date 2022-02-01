@@ -12,9 +12,15 @@ const initialState = {
 };
 
 export const signUpUser = createAsyncThunk('signUp/postUser', async(dispatch, getstate)=>{
-  const res = await axios.post("https://jsonplaceholder.typicode.com/posts",{
-    title: 'testing axxxxios',
-    body: 'come on!'
+  const res = await axios.post("https://localhost:8080/api/ins",{
+    "name": "teeesting",
+    "id": "",
+    "surname": "",
+    "pnr": "",
+    "email": "",
+    "password": "",
+    "role_id": "" ,
+    "username":""
   });
   console.log('POST: ', res)
   return res.data;
