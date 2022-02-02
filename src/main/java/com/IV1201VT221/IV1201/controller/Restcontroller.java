@@ -7,7 +7,7 @@ import com.IV1201VT221.IV1201.model.Person;
 import com.IV1201VT221.IV1201.service.DatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(origins = "*")
 @RestController
 public class Restcontroller {
 
@@ -17,7 +17,6 @@ public class Restcontroller {
     public Restcontroller(DatabaseService databaseservice) {
         this.databaseservice = databaseservice;
     }
-
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
     public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
         return databaseservice.insertPerson(person);

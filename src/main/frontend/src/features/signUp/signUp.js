@@ -37,14 +37,14 @@ const setUserName=(name)=>{
   const post=async()=>{
     try{
       await dispatch(signUpUser({
-    "name": "Joelle",
+    "name": " test",
     "id": "1",
     "surname": "Wilkinson",
-    "pnr": "12313123123123123213",
-    "email": "asdasdasda@sdad.se",
+    "pnr": "1231312323123213",
+    "email": "xaxaxidasdasdaa@sdad.se",
     "password": "LiZ98qvL8Lw",
     "role_id": "1" ,
-    "username":""
+    "username":"comeOO00OOasdanMaaan"
   }  )).unwrap()
     }catch(err){
       console.log('post err: ', err)
@@ -79,7 +79,7 @@ const setUserName=(name)=>{
     <button onClick={()=>{
       dispatch(signUp({name: userName.val, passwd:passWord.val,
                        pid: PId.val, email: email.val}))
-      handleSubmit()}
+      post()}
     }>
       Sign up!
     </button>

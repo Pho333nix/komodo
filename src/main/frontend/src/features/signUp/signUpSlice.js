@@ -12,13 +12,7 @@ const initialState = {
 };
 
 export const signUpUser = createAsyncThunk('signUp/postUser',async obj =>{
-  const res = await axios.post("https://mycorsproxy123.herokuapp.com/https://localhost:8080/api/ins",
-    {
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-      data: obj
-    })
+  const res = await axios.post("//localhost:8080/api/ins",obj)
   return res.data;
 })
 
