@@ -11,18 +11,14 @@ const initialState = {
   res: ' '
 };
 
-export const signUpUser = createAsyncThunk('signUp/postUser', async(dispatch, getstate)=>{
-  const res = await axios.post("https://localhost:8080/api/ins",{
-    "name": "teeesting",
-    "id": "",
-    "surname": "",
-    "pnr": "",
-    "email": "",
-    "password": "",
-    "role_id": "" ,
-    "username":""
-  });
-  console.log('POST: ', res)
+export const signUpUser = createAsyncThunk('signUp/postUser',async obj =>{
+  const res = await axios.post("https://mycorsproxy123.herokuapp.com/https://localhost:8080/api/ins",
+    {
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+      data: obj
+    })
   return res.data;
 })
 
@@ -38,7 +34,9 @@ export const signUpSlice = createSlice({
     },
     extraReducers:{
       [signUpUser.pending]: (state, action)=>{
-        state.status = 'loading'
+        state.status = 'loading';
+        console.log('state status', state.status);
+
       },
       [signUpUser.fulfilled]:(state, action)=>{
         state.status = 'sucess'

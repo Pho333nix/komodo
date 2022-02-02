@@ -4,7 +4,8 @@ import axios from 'axios';
 const initialState ={
   posts: [],
   status: null,
-  error: null
+  error: null,
+  hasAcc: false
 };
 
 export const fetchPosts = createAsyncThunk('home/fetchPosts', async(dispatch, getstate)=>{
@@ -12,7 +13,13 @@ export const fetchPosts = createAsyncThunk('home/fetchPosts', async(dispatch, ge
   console.log('res', res)
   return res.data;
 })
-
+/*
+ * accpets:
+ * (1) A string that will be used as the prefix for the generated action types
+   (2) A "payload creator" callback function that should return a Promise
+   containing some data,  or a rejected Promise with an error
+   response -->{data: []},
+ */
 export const homeSlice= createSlice({
   name: 'home',
   initialState,
@@ -34,13 +41,7 @@ export const homeSlice= createSlice({
     }
   }
 });
-/*
- * accpets:
- * (1) A string that will be used as the prefix for the generated action types
-   (2) A "payload creator" callback function that should return a Promise
-   containing some data,  or a rejected Promise with an error
-   response -->{data: []},
- */
+
 export const posts = (state) => state.home;
 export const { toggleHasAcc } = homeSlice.actions;
 export default homeSlice.reducer;

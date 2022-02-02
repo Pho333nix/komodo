@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { signUp, signUpUser } from './signUpSlice'
 import { toggleHasAcc } from '../home/homeSlice';
+import { useNavigate } from 'react-router-dom';
 
 export function SignUp(){
   const [userName, passWord] = useState({val: ' '});
   const [PId, email] = useState({val: ' '});
-  const dispatch = useDispatch();
 
-  const setUserName=(name)=>{
+  const dispatch = useDispatch();
+  const state = useSelector(state => state.home);
+  const isAuth = useSelector(state => state.home.hasAcc)
+  const navigate = useNavigate();
+
+  console.log('state: ', state)
+const setUserName=(name)=>{
     userName.val= name;
     //console.log(userName);
   }
@@ -23,10 +29,32 @@ export function SignUp(){
     email.val = mail;
     console.log(email);
   }
-/*testing button
-  const printV=()=>{
-    console.log(userName.val +' '+ passWord.val);
-  }*/
+  useEffect(()=>{
+    if(isAuth){
+      navigate("/")
+    }
+  },[isAuth])
+  const post=async()=>{
+    try{
+      await dispatch(signUpUser({
+    "name": "Joelle",
+    "id": "1",
+    "surname": "Wilkinson",
+    "pnr": "12313123123123123213",
+    "email": "asdasdasda@sdad.se",
+    "password": "LiZ98qvL8Lw",
+    "role_id": "1" ,
+    "username":""
+  }  )).unwrap()
+    }catch(err){
+      console.log('post err: ', err)
+    }
+  }
+  const handleSubmit =()=>{
+   // e.preventDefault(); // stops refreshing of page
+    dispatch(toggleHasAcc());
+  }
+
   return(
 <div><p>Signup here</p>
   <form>
@@ -51,7 +79,7 @@ export function SignUp(){
     <button onClick={()=>{
       dispatch(signUp({name: userName.val, passwd:passWord.val,
                        pid: PId.val, email: email.val}))
-      dispatch(signUpUser())}
+      handleSubmit()}
     }>
       Sign up!
     </button>
