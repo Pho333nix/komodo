@@ -17,7 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin(origins = "*")
 @RestController
 public class Restcontroller {
     @Autowired
@@ -34,6 +34,7 @@ public class Restcontroller {
         this.databaseservice = databaseservice;
     }
 
+
     @RequestMapping(value = "/api/auth/{username}", method = RequestMethod.GET)
     public String getUser(@PathVariable String username) throws UsernameNotFoundException {
         return databaseservice.getPerson(username);
@@ -45,6 +46,7 @@ public class Restcontroller {
         cred = databaseservice.getCredentials(username);
         return cred;
     }
+
 
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
     public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {

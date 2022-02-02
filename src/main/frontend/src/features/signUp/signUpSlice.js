@@ -1,9 +1,20 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import axios from 'axios';
+
 
 const initialState = {
   userName: ' ',
-  password: ' '
+  password: ' ',
+  pid: ' ',
+  email: ' ',
+  status: 'idle',
+  res: ' '
 };
+
+export const signUpUser = createAsyncThunk('signUp/postUser',async obj =>{
+  const res = await axios.post("//localhost:8080/api/ins",obj)
+  return res.data;
+})
 
 export const signUpSlice = createSlice({
   name: 'signUp',
@@ -12,6 +23,22 @@ export const signUpSlice = createSlice({
     signUp:(state, actions)=>{
       state.userName = actions.payload.name;
       state.password = actions.payload.passwd;
+      state.pid = actions.payload.pid;
+      state.email = actions.payload.email;
+    },
+    extraReducers:{
+      [signUpUser.pending]: (state, action)=>{
+        state.status = 'loading';
+        console.log('state status', state.status);
+
+      },
+      [signUpUser.fulfilled]:(state, action)=>{
+        state.status = 'sucess'
+        state.res = action.payload;
+      },
+      [signUpUser.rejected]:(state, action)=>{
+        state.res = action.payload
+      }
     }
   }
 })
