@@ -2,12 +2,17 @@ package com.IV1201VT221.IV1201.dao;
 
 import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
 import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
+import com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException;
 import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
 import com.IV1201VT221.IV1201.model.Person;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -60,5 +65,42 @@ public class PersonDao implements PersonDaoInterface {
     @Override
     public int deletePerson(int id, Person person) {
         return 0;
+    }
+
+    /*
+    @param String username Uses email for now
+    @return String[] array with username and password(email and person_id for now)
+    */
+    @Override
+    public String[] getCredentials(String username) throws UsernameNotFoundException{
+        String[] result = new String[2];
+        String sql = "SELECT email FROM person WHERE email = ?";
+        String sql2 = "SELECT person_id FROM person WHERE email = ?";
+        result[0] = jdbcTemplate.queryForObject(sql, new Object[] {username}, String.class);
+        result[1] = jdbcTemplate.queryForObject(sql2, new Object[] {username}, String.class);
+        if(result[0] == null || result[1] == null){
+            throw new UsernameNotFoundException("USER NOT FOUND");
+        }
+        return result;
+    }
+    /*
+    @param username The username to check for in the database
+    @return return the username is exists
+     */
+    @Override
+    public String getPerson(String username) throws UsernameNotFoundException {
+        String sqlGetUser = "SELECT email FROM person WHERE email = ?";
+        try{
+            String uname = jdbcTemplate.queryForObject(sqlGetUser, new Object[] {username}, String.class);
+            if(uname.isEmpty() || uname == null){
+                throw new UsernameNotFoundException("");
+            }
+            return uname;
+        }catch(Exception e){
+            System.out.println("USER NOT FOUND");
+            System.out.println(e);
+            return "";
+        }
+
     }
 }
