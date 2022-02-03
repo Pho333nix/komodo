@@ -2,8 +2,8 @@ import React from 'react';
 //import { Counter } from './features/counter/Counter';
 import { Home } from './features/home/home'
 import { Navbar } from './features/navbar/navBar'
-import { SignIn } from './features/signIn/SignIn'
-import { SignUp } from './features/signUp/signUp'
+import { SignIn } from './features/user/signIn/SignIn'
+import { SignUp } from './features/user/signUp/signUp'
 import './App.css';
 import {BrowserRouter as Router, Routes, Switch, Route} from 'react-router-dom';
 

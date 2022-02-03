@@ -7,6 +7,7 @@ const initialState = {
   password: ' ',
   pid: ' ',
   email: ' ',
+  role: ' ',
   status: 'idle',
   res: ' '
 };
@@ -43,5 +44,6 @@ export const signUpSlice = createSlice({
   }
 })
 
+//export const useSelector = state =>
 export const {signUp} = signUpSlice.actions;
 export default signUpSlice.reducer;
