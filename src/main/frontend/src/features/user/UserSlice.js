@@ -4,20 +4,24 @@ import axios from 'axios';
 export const signUpUser = createAsyncThunk('user/signUpUser',async (obj, thunkAPI) =>{
   try{
   const res = await axios.post("//localhost:8080/api/ins",obj)
-    return res;
+    return res.data;
   }catch(err){
    // console.log(err)
    // throw new Error('user already exists, try signing in or reset account')
-      return thunkAPI.rejectWithValue(err.response.data)
+      return thunkAPI.rejectWithValue(err)
   }
 })
 
 export const signInUser = createAsyncThunk('user/signInUser',async(credentials, thunkAPI)=>{
   try{
     const res = await axios.post('//localhost:8080/auth', credentials)
-    return res;
+    if(res.data.jwt){
+      localStorage.setItem("user", JSON.stringify(res.data))
+      sessionStorage.setItem('jwt', res.data.jwt)
+    }
+    return res.data;
   }catch(err){
-    return thunkAPI.rejectWithValue(err.response.data);
+    return thunkAPI.rejectWithValue(err);
   }
 });
 
@@ -34,7 +38,9 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers:{
-
+    clearState: (state) =>{
+      state.status = 'idle';
+    }
   },
   extraReducers:{
        [signUpUser.pending]: (state, action)=>{
@@ -62,5 +68,6 @@ export const userSlice = createSlice({
   }
 });
 
-export const userSelector = state => state.user;
+export const userSelector = (state) => state.user;
+export const { clearState } = userSlice.actions;
 export default userSlice.reducer;

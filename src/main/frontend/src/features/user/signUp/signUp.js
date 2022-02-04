@@ -16,7 +16,7 @@ export function SignUp(){
     }
   });
   const [errorMsg, setErrorMsg] = useState('');
- const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { status, res } = useSelector(userSelector);
   const navigate = useNavigate();
 
@@ -66,7 +66,7 @@ const setUserName=(uName)=>{
 
   useEffect(()=>{
     if(status === 'success'){
-      navigate("/")
+      navigate("/UserRecruit")
     }else if(status === 'error'){
       setErrorMsg(res)
     }
@@ -82,7 +82,7 @@ const setUserName=(uName)=>{
 
   return(
 <div><p>Signup here</p>
-  <form>
+  <form onSubmit={handleSubmit()}>
     <label>
       Username:
       <input type='text' name='username' value={user.userName}  onChange={(e)=>{setUserName(e.target.value)}}/>
@@ -117,11 +117,11 @@ const setUserName=(uName)=>{
      </select>
 
   </form>
-  <button onClick={()=>{ handleSubmit()}}>
+  <button>
       Sign up!
     </button>
 {errorMsg && (
-  <p className="error"> {errorMsg} </p>
+  <p style={{color:'red'}} className="error"> {errorMsg} </p>
 )}
 </div>);
 
