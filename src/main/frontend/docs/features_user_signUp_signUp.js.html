@@ -1,4 +1,32 @@
-import React, { useEffect, useState } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: features/user/signUp/signUp.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: features/user/signUp/signUp.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { signUpUser, userSelector } from './../UserSlice';
 import { useNavigate } from 'react-router-dom';
@@ -80,31 +108,20 @@ const setUserName=(uName)=>{
      }));
   }
 
- /**
-  * function that will add the name to the state-hook object.
-  * @param { name } the function the user supplies
- */
+  
   const setName=(name)=>{
    setUser(prevState =>({
      ...prevState,
      name: name
    }));
   }
-  /**
-  * function that will add the surname to the state-hook object.
-  * @param { SName } the function the user supplies
- */
   const setSurName=(SName)=>{
      setUser(prevState =>({
      ...prevState,
      surname : SName
    }));
   }
-/**
- * useEffect hook, replaces componentWillUpdate and ComponentWillMount
- * in the dependency array we have status and errorMsg, as soon as one
- * changes the view will re-render.
- */
+
   useEffect(()=>{
     if(status === 'success'){
       navigate("/UserRecruit")
@@ -115,56 +132,77 @@ const setUserName=(uName)=>{
 
   //TODO: make sure button is only clickable if we filled all values
   // TODO:https://www.npmjs.com/package/react-validation
-/**
- * a function that will dispatch the action to sign-up the user.
- */
+
   const handleSubmit =()=>{
  dispatch(signUpUser(user))
   }
 
   return(
-<div><p>Signup here</p>
-  <form>
-    <label>
+&lt;div>&lt;p>Signup here&lt;/p>
+  &lt;form onSubmit={handleSubmit()}>
+    &lt;label>
       Username:
-      <input type='text' name='username' value={user.userName}  onChange={(e)=>{setUserName(e.target.value)}}/>
-     </label>
-    <label>
+      &lt;input type='text' name='username' value={user.userName}  onChange={(e)=>{setUserName(e.target.value)}}/>
+     &lt;/label>
+    &lt;label>
       password:
-      <input type='password' name='password' value={user.passWord}  onChange={(e)=>{setPassword(e.target.value)}}/>
-    </label>
-      <br/>
-    <label>
+      &lt;input type='password' name='password' value={user.passWord}  onChange={(e)=>{setPassword(e.target.value)}}/>
+    &lt;/label>
+      &lt;br/>
+    &lt;label>
         social security number:
-      <input type='number' required={12} value={user.PID} onChange={(e)=>{setPID(e.target.value)}}/>
-     </label>
-    <label htmlFor='email'>
+      &lt;input type='number' required={12} value={user.PID} onChange={(e)=>{setPID(e.target.value)}}/>
+     &lt;/label>
+    &lt;label htmlFor='email'>
       email:
-      <input type='email' value={user.email}  onChange={(e)=>{setMail(e.target.value)}}/>
-      <br/>
-    </label>
-    <label>
+      &lt;input type='email' value={user.email}  onChange={(e)=>{setMail(e.target.value)}}/>
+      &lt;br/>
+    &lt;/label>
+    &lt;label>
       name:
-      <input type='text'  value={user.name} onChange={(e)=>{setName(e.target.value)}}/>
-     </label>
-    <label>
+      &lt;input type='text'  value={user.name} onChange={(e)=>{setName(e.target.value)}}/>
+     &lt;/label>
+    &lt;label>
       surname:
-      <input type='text'  value={user.SName} onChange={(e)=>{setSurName(e.target.value)}}/>
-    </label>
-      <br/>
-    <select name="role" value={user.role} onChange={(e)=>{setRole(e.target.value)}}>
+      &lt;input type='text'  value={user.SName} onChange={(e)=>{setSurName(e.target.value)}}/>
+    &lt;/label>
+      &lt;br/>
+    &lt;select name="role" value={user.role} onChange={(e)=>{setRole(e.target.value)}}>
       role:
-      <option value="1">recruit</option>
-      <option value="2">recruiter</option>
-     </select>
+      &lt;option value="1">recruit&lt;/option>
+      &lt;option value="2">recruiter&lt;/option>
+     &lt;/select>
 
-  </form>
-  <button onClick={handleSubmit}>
+  &lt;/form>
+  &lt;button>
       Sign up!
-    </button>
-{errorMsg && (
-  <p style={{color:'red'}} className="error"> {errorMsg} </p>
+    &lt;/button>
+{errorMsg &amp;&amp; (
+  &lt;p style={{color:'red'}} className="error"> {errorMsg} &lt;/p>
 )}
-</div>);
+&lt;/div>);
 
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#SignUp">SignUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Feb 09 2022 17:31:40 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

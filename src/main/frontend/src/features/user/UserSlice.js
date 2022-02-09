@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-
+/**
+ *
+ * */
 export const signUpUser = createAsyncThunk('user/signUpUser',async (obj, thunkAPI) =>{
   try{
   const res = await axios.post("//localhost:8080/api/ins",obj)
     return res.data;
   }catch(err){
-   // console.log(err)
    // throw new Error('user already exists, try signing in or reset account')
       return thunkAPI.rejectWithValue(err)
   }
@@ -25,6 +26,9 @@ export const signInUser = createAsyncThunk('user/signInUser',async(credentials, 
   }
 });
 
+/**
+ * initial state of the reducer
+ */
 const initialState = {
   userName: ' ',
   password: ' ',
@@ -34,6 +38,12 @@ const initialState = {
   status: 'idle',
   res: ' '
 };
+
+/**
+ * This function creates userSlice. This function creates
+ * the reducer and actions associated with the reducers.
+ * extraReducers: handles the async reducer logic.
+ */
 export const userSlice = createSlice({
   name: 'user',
   initialState,

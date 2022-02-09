@@ -1,14 +1,20 @@
 import React from 'react';
-//import { Counter } from './features/counter/Counter';
 import { Home } from './features/home/home'
 import { Navbar } from './features/navbar/navBar'
 import { SignIn } from './features/user/signIn/SignIn'
 import { SignUp } from './features/user/signUp/signUp'
 import { UserRecruit } from './features/user/userRecruit'
-import SimpleForm from './features/user/signUp/form'
 import './App.css';
 import {BrowserRouter as Router, Routes, Switch, Route} from 'react-router-dom';
+// @ts-check
 
+
+/**
+ * @component
+ * functional component App, implements router functionality
+ * through Router/Route/Switch components. Parent node to all
+ * views/components
+ */
 function App() {
 
 return(
