@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
+/**
+* Person object representing a real person.
+* The class is used for functionality where a person object might be useful for example inserting a person into the database.
+*/
 public class Person {
     protected String name;
     protected final int personID;
@@ -15,6 +19,18 @@ public class Person {
     protected String username;
 
 
+    /**
+    * Constructor setting various values of a person.
+    * @JsonProperty is used so that we can create a person using json filled requests.
+    * @param  name of the person
+    * @param  personID of the person 
+    * @param  surname of the person 
+    * @param  pnr of the person 
+    * @param  email of the person 
+    * @param  pasword of the person 
+    * @param  role_id of the person 
+    * @param  username of the person 
+    */
     public Person(
             @JsonProperty("name") String name,
             @JsonProperty("id") int personID,

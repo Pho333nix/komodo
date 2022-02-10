@@ -18,7 +18,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
-
+/**
+* Person-Access Object implementing the DaoInterface.
+* This class contains methods for directly interacting with the database.
+* Classes wanting to use this Dao should be placed in the service package.
+*/
 @Repository("postgres")
 public class PersonDao implements PersonDaoInterface {
 
@@ -26,11 +30,21 @@ public class PersonDao implements PersonDaoInterface {
 
     Logger logger = LoggerFactory.getLogger(PersonDao.class);
 
+    /**
+    * Constructor setting jdbcTemplate
+    * @param  jdbctemplate object used for writing queries.
+    */
     @Autowired
     public PersonDao(JdbcTemplate jdbctemplate){
         this.jdbcTemplate = jdbctemplate;
     }
 
+    /**
+    * Inserts a person into the database.
+    * 
+    * @param  person to be inserted.
+    * @return        a integer representing if the insertion was successful or not. 
+    */
     @Override
     public int insertPerson(Person person) throws UsernameTakenException, EmailTakenException, PnrTakenException {
         int id = person.getID();
