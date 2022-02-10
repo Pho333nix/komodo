@@ -10,6 +10,8 @@ import com.IV1201VT221.IV1201.model.Person;
 import com.IV1201VT221.IV1201.service.DatabaseService;
 import com.IV1201VT221.IV1201.service.MyUserDetailsService;
 import com.IV1201VT221.IV1201.util.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +30,7 @@ public class Restcontroller {
     private JwtUtil jwtTokenUtil;
 
     DatabaseService databaseservice;
+    Logger logger = LoggerFactory.getLogger(Restcontroller.class);
 
     @Autowired
     public Restcontroller(DatabaseService databaseservice) {
@@ -67,6 +70,7 @@ public class Restcontroller {
             );
 
         }catch(BadCredentialsException e){
+            logger.error("INCORRECT CREDENTIALS", e);
             throw new Exception("incorrect credentials", e);
         }
 

@@ -1,10 +1,13 @@
 package com.IV1201VT221.IV1201.dao;
 
+import com.IV1201VT221.IV1201.controller.Restcontroller;
 import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
 import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
 import com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException;
 import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
 import com.IV1201VT221.IV1201.model.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,6 +23,8 @@ import java.util.UUID;
 public class PersonDao implements PersonDaoInterface {
 
     private final JdbcTemplate jdbcTemplate;
+
+    Logger logger = LoggerFactory.getLogger(PersonDao.class);
 
     @Autowired
     public PersonDao(JdbcTemplate jdbctemplate){
@@ -39,18 +44,24 @@ public class PersonDao implements PersonDaoInterface {
 
         String sqlUsernameTaken = "SELECT COUNT(*) FROM person WHERE username = ?";
         int userNameTaken = jdbcTemplate.queryForObject(sqlUsernameTaken, new Object[] {username}, Integer.class);
-        if (userNameTaken > 0)
+        if (userNameTaken > 0) {
+            logger.error("username taken");
             throw new UsernameTakenException("");
+        }
 
         String sqlEmailTaken = "SELECT COUNT(*) FROM person WHERE email = ?";
         int emailTaken = jdbcTemplate.queryForObject(sqlEmailTaken, new Object[] {email}, Integer.class);
-        if (emailTaken > 0)
+        if (emailTaken > 0) {
+            logger.error("email taken");
             throw new EmailTakenException("");
+        }
 
         String sqlSsnTaken = "SELECT COUNT(*) FROM person WHERE pnr = ?";
         int ssnTaken = jdbcTemplate.queryForObject(sqlSsnTaken, new Object[] {email}, Integer.class);
-        if (ssnTaken > 0)
+        if (ssnTaken > 0) {
+            logger.error("pnr taken");
             throw new PnrTakenException("");
+        }
 
         int sqlReturnValue = jdbcTemplate.update(
                 "INSERT INTO person(name, surname, pnr, email, password, role_id, username) " + "VALUES (?, ?, ?, ?, ?, ?, ?)", name, surname, pnr, email, password, role_id, username);
@@ -93,10 +104,12 @@ public class PersonDao implements PersonDaoInterface {
         try{
             String uname = jdbcTemplate.queryForObject(sqlGetUser, new Object[] {username}, String.class);
             if(uname.isEmpty() || uname == null){
+                logger.error("username not found");
                 throw new UsernameNotFoundException("");
             }
             return uname;
         }catch(Exception e){
+            logger.error("user not found", e);
             System.out.println("USER NOT FOUND");
             System.out.println(e);
             return "";
