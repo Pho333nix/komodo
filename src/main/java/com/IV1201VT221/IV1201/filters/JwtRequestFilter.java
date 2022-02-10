@@ -27,7 +27,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private MyUserDetailsService userDetailsService;
     @Autowired
     private JwtUtil jwtUtil;
-
+    /*
+    @param request
+    @param response
+    @param filterchain
+    Looks if header contains "bearer + <jwttoken> and sets the user
+    to the security context which allows them to access server
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {

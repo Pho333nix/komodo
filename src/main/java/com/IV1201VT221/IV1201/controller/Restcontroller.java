@@ -56,11 +56,12 @@ public class Restcontroller {
         return databaseservice.insertPerson(person);
     }
 
-    @RequestMapping("/start")
-    public String hello(){
-        return "logged in";
-    }
-
+    /*
+    Returns a valid jwt token for a user
+    @param username
+    @param password
+    @return jwt token
+     */
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
         try{
