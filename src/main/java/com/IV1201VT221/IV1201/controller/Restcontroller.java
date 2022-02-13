@@ -1,9 +1,6 @@
 package com.IV1201VT221.IV1201.controller;
 
-import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
-import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
-import com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException;
-import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
+import com.IV1201VT221.IV1201.exceptions.*;
 import com.IV1201VT221.IV1201.model.AuthenticationRequest;
 import com.IV1201VT221.IV1201.model.AuthenticationResponse;
 import com.IV1201VT221.IV1201.model.Person;
@@ -40,6 +37,8 @@ public class Restcontroller {
 
     @RequestMapping(value = "/api/auth/{username}", method = RequestMethod.GET)
     public String getUser(@PathVariable String username) throws UsernameNotFoundException {
+        System.out.println(username);
+        System.out.println("HEJ");
         return databaseservice.getPerson(username);
     }
 
@@ -54,6 +53,12 @@ public class Restcontroller {
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
     public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
         return databaseservice.insertPerson(person);
+    }
+
+    @RequestMapping(value = "/api/user/{email}", method = RequestMethod.GET)
+    public Person getPersonObject(@PathVariable String email) throws DataNotFoundException {
+        System.out.println(email);
+        return databaseservice.getPersonObject(email);
     }
 
     /*

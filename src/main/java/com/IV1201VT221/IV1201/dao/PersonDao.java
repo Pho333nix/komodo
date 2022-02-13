@@ -78,6 +78,39 @@ public class PersonDao implements PersonDaoInterface {
         return 0;
     }
 
+    @Override
+    public Person getPersonObject(String email){
+        String sqlString = "SELECT name FROM person WHERE email = ?";
+        String name = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+        sqlString = "SELECT person_id FROM person WHERE email = ?";
+        int id = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, Integer.class);
+        sqlString = "SELECT surname FROM person WHERE email = ?";
+        String surname = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+        sqlString = "SELECT pnr FROM person WHERE email = ?";
+        String pnr = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+        sqlString = "SELECT password FROM person WHERE email = ?";
+        String password = "";
+        try{
+            password = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+        }catch(Exception e){
+            logger.error("password not found, set empty string");
+            password = "";
+        }
+
+        sqlString = "SELECT role_id FROM person WHERE email =?";
+        int role_id = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, Integer.class);
+        sqlString = "SELECT username FROM person WHERE email =?";
+        String username = "";
+        try{
+            username = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+        }catch(Exception e){
+            logger.error("username not found, set empty string");
+            username = "";
+        }
+        return new Person(name, id, surname, pnr, email, password, role_id, username);
+
+    }
+
     /*
     @param String username Uses email for now
     @return String[] array with username and password(email and person_id for now)
@@ -110,8 +143,6 @@ public class PersonDao implements PersonDaoInterface {
             return uname;
         }catch(Exception e){
             logger.error("user not found", e);
-            System.out.println("USER NOT FOUND");
-            System.out.println(e);
             return "";
         }
 
