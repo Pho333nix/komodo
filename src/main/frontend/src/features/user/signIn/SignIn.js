@@ -37,7 +37,7 @@ export function SignIn(){
 
   return(
 <div>
-  <form onSubmit={handleSubmit}>
+  <form>
     <label>
       Username:
       <input type='text'  onChange={(e)=>{setUserName(e.target.value)}}/>
@@ -47,7 +47,7 @@ export function SignIn(){
       <input type='text'  onChange={(e)=>{setPassword(e.target.value)}}/>
     </label>
   </form>
-  <button>Log in</button>
+  <button onClick={handleSubmit}>Log in</button>
 </div>);
 
 }
