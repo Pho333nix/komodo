@@ -57,7 +57,6 @@ public class Restcontroller {
 
     @RequestMapping(value = "/api/user/{email}", method = RequestMethod.GET)
     public Person getPersonObject(@PathVariable String email) throws DataNotFoundException {
-        System.out.println(email);
         return databaseservice.getPersonObject(email);
     }
 
