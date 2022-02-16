@@ -16,6 +16,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+/**
+* Controller for handling incoming HTTP requests.
+* A RestController does not return any views. It only handles requests and formats responses.
+* It will handle exceptions thrown by methods annotated with @RequestMapping or
+*/
 @CrossOrigin(origins = "*")
 @RestController
 public class Restcontroller {
@@ -29,12 +35,20 @@ public class Restcontroller {
     DatabaseService databaseservice;
     Logger logger = LoggerFactory.getLogger(Restcontroller.class);
 
+    /**
+    * Constructor which instanciates a databaseservice which communicates with the dao layer which in turn communicates with the database
+    * @param  databaseservice A databaseservice object 
+    */
     @Autowired
     public Restcontroller(DatabaseService databaseservice) {
         this.databaseservice = databaseservice;
     }
 
-
+    /**
+    * Returns a user given a particular username 
+    * @param  username The username to be retrieved 
+    * @return          The user retrieved from the database.
+    */
     @RequestMapping(value = "/api/auth/{username}", method = RequestMethod.GET)
     public String getUser(@PathVariable String username) throws UsernameNotFoundException {
         System.out.println(username);
@@ -42,6 +56,11 @@ public class Restcontroller {
         return databaseservice.getPerson(username);
     }
 
+    /**
+    * Returns credentials of a user given a particular username 
+    * @param  username The username which credentials is to be retrieved 
+    * @return          The credentials retrieved from the database
+    */
     @RequestMapping(value = "/api/cred/{username}", method = RequestMethod.GET)
     public String[] getCred(@PathVariable String username) throws UsernameNotFoundException {
         String[] cred = new String[2];
@@ -49,7 +68,11 @@ public class Restcontroller {
         return cred;
     }
 
-
+    /**
+    * Inserts a user into the database
+    * @param  Person A person object
+    * @return        A integer representing if the insertion was successful or not. 
+    */
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
     public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
         return databaseservice.insertPerson(person);
