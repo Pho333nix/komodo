@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import { signUpUser, userSelector } from './../UserSlice';
 import { useNavigate } from 'react-router-dom';
+import Form from "react-validation/build/form"
+import Input from "react-validation/build/input"
+import Button from "react-validation/build/button"
+import CheckButton from "react-validation/build/button"
+import { isEmail } from "validator";
+
 //@ts-check
 
 /**
@@ -28,6 +34,36 @@ export function SignUp(){
   const dispatch = useDispatch();
   const { status, res } = useSelector(userSelector);
   const navigate = useNavigate();
+
+  /**
+   * @function required
+   * alerts user that a field is required
+   * */
+const required = value => {
+  if (!value) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        This field is required!
+      </div>
+    );
+  }
+};
+  /**
+   * @function emailValidate
+   * alerts user if the email provided is
+   * incalid.
+   * @param { value } is the user provided email
+   * */
+const emailValidate = value => {
+  if (!isEmail(value)) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        This is not a valid email.
+      </div>
+    );
+  }
+};
+
 /**
  * function that will add the name to the state-hook object.
  * @param { uName } the function the user supplies */
@@ -124,44 +160,65 @@ const setUserName=(uName)=>{
 
   return(
 <div><p>Signup here</p>
-  <form>
+  <Form onSubmit={handleSubmit}>
     <label>
       Username:
-      <input type='text' name='username' value={user.userName}  onChange={(e)=>{setUserName(e.target.value)}}/>
+      <Input type='text' name='username'
+             value={user.userName}
+             onChange={(e)=>{setUserName(e.target.value)}}
+            validations={[required]}/>
      </label>
     <label>
       password:
-      <input type='password' name='password' value={user.passWord}  onChange={(e)=>{setPassword(e.target.value)}}/>
+      <Input type='password'
+             name='password'
+             value={user.passWord}
+             onChange={(e)=>{setPassword(e.target.value)}}
+             validations={[required]}/>
     </label>
       <br/>
     <label>
         social security number:
-      <input type='number' required={12} value={user.PID} onChange={(e)=>{setPID(e.target.value)}}/>
+      <Input type='number'
+             required={12}
+             value={user.PID}
+             onChange={(e)=>{setPID(e.target.value)}}
+             validations={[required]}/>
      </label>
     <label htmlFor='email'>
       email:
-      <input type='email' value={user.email}  onChange={(e)=>{setMail(e.target.value)}}/>
-      <br/>
+      <Input type='email'
+             value={user.email}
+             onChange={(e)=>{setMail(e.target.value)}}
+             validations={[required, emailValidate]}/>
     </label>
+      <br/>
     <label>
       name:
-      <input type='text'  value={user.name} onChange={(e)=>{setName(e.target.value)}}/>
+      <Input type='text'
+             value={user.name}
+             onChange={(e)=>{setName(e.target.value)}}
+            validations={[required]}/>
      </label>
     <label>
       surname:
-      <input type='text'  value={user.SName} onChange={(e)=>{setSurName(e.target.value)}}/>
+      <Input type='text'
+             value={user.SName}
+             onChange={(e)=>{setSurName(e.target.value)}}
+            validations={[required]}/>
     </label>
       <br/>
     <select name="role" value={user.role} onChange={(e)=>{setRole(e.target.value)}}>
       role:
-      <option value="1">recruit</option>
-      <option value="2">recruiter</option>
+      <option value="1">recruiter</option>
+      <option value="2">recruit</option>
      </select>
-
-  </form>
-  <button onClick={handleSubmit}>
+  <Button className="button"
+          >
       Sign up!
-    </button>
+    </Button>
+  </Form>
+
 {errorMsg && (
   <p style={{color:'red'}} className="error"> {errorMsg} </p>
 )}

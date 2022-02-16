@@ -8,6 +8,9 @@ import com.IV1201VT221.IV1201.model.Person;
 
 import java.util.UUID;
 
+/**
+* PersonDaoInterface for interacting with the database.
+*/
 public interface PersonDaoInterface {
     int insertPerson(Person user) throws UsernameTakenException, EmailTakenException, PnrTakenException;
     int updatePerson(int id, Person person);
