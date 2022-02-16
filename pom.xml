@@ -17,8 +17,6 @@
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
-
-
        <dependency>
            <groupId>org.springframework.boot</groupId>
            <artifactId>spring-boot-starter-security</artifactId>
@@ -28,8 +26,6 @@
            <artifactId>spring-security-test</artifactId>
            <scope>test</scope>
        </dependency>
-
-
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -41,8 +37,6 @@
             <artifactId>jaxb-api</artifactId>
             <version>2.3.0</version>
         </dependency>
-
-
        <dependency>
            <groupId>org.springframework.boot</groupId>
            <artifactId>spring-boot-starter-web</artifactId>
@@ -51,7 +45,6 @@
            <groupId>org.flywaydb</groupId>
            <artifactId>flyway-core</artifactId>
        </dependency>
-
        <dependency>
            <groupId>org.postgresql</groupId>
            <artifactId>postgresql</artifactId>
