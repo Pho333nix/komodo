@@ -97,7 +97,7 @@ public class PersonDao implements PersonDaoInterface {
         String sqlString = "SELECT name FROM person WHERE email = ?";
         String name = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
         sqlString = "SELECT person_id FROM person WHERE email = ?";
-        int id = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, Integer.class);
+        //int id = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, Integer.class);
         sqlString = "SELECT surname FROM person WHERE email = ?";
         String surname = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
         sqlString = "SELECT pnr FROM person WHERE email = ?";
@@ -121,7 +121,7 @@ public class PersonDao implements PersonDaoInterface {
             logger.error("username not found, set empty string");
             username = "";
         }
-        return new Person(name, id, surname, pnr, email, password, role_id, username);
+        return new Person(name, surname, pnr, email, password, role_id, username);
 
     }
 
