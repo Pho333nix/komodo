@@ -154,8 +154,8 @@ const setUserName=(uName)=>{
       <br/>
     <select name="role" value={user.role} onChange={(e)=>{setRole(e.target.value)}}>
       role:
-      <option value="1">recruit</option>
-      <option value="2">recruiter</option>
+      <option value="1">recruiter</option>
+      <option value="2">recruit</option>
      </select>
 
   </form>
