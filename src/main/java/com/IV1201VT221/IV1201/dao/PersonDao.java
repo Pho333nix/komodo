@@ -122,9 +122,9 @@ public class PersonDao implements PersonDaoInterface {
         String sql2 = "SELECT person_id FROM person WHERE email = ?";
         result[0] = jdbcTemplate.queryForObject(sql, new Object[] {username}, String.class);
         result[1] = jdbcTemplate.queryForObject(sql2, new Object[] {username}, String.class);
-        if(result[0] == null || result[1] == null){
+        /*if(result[0] == null || result[1] == null){
             throw new UsernameNotFoundException("USER NOT FOUND");
-        }
+        }*/
         return result;
     }
     /*
