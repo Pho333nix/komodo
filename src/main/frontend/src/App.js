@@ -6,6 +6,8 @@ import { SignUp } from './features/user/signUp/signUp'
 import { UserRecruit } from './features/user/userRecruit'
 import './App.css';
 import {BrowserRouter as Router, Routes, Switch, Route} from 'react-router-dom';
+import "bootstrap/dist/css/bootstrap.min.css";
+
 // @ts-check
 
 

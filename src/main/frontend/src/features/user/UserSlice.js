@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
 /**
- *
+ * Authentication service: start
  * */
+const API_URL = '//localhost:8080/auth';
+
 export const signUpUser = createAsyncThunk('user/signUpUser',async (obj, thunkAPI) =>{
   try{
   const res = await axios.post("//localhost:8080/api/ins",obj)
@@ -15,7 +17,7 @@ export const signUpUser = createAsyncThunk('user/signUpUser',async (obj, thunkAP
 
 export const signInUser = createAsyncThunk('user/signInUser',async(credentials, thunkAPI)=>{
   try{
-    const res = await axios.post('//localhost:8080/auth', credentials)
+    const res = await axios.post(API_URL, credentials)
     if(res.data.jwt){
       localStorage.setItem("user", JSON.stringify(res.data))
       sessionStorage.setItem('jwt', res.data.jwt)
@@ -26,6 +28,15 @@ export const signInUser = createAsyncThunk('user/signInUser',async(credentials, 
   }
 });
 
+/**
+ *  removes the jwt token stored in localStorage
+ * */
+export const logout = () =>{
+  localStorage.removeItem("user");
+}
+/**
+ * Authentication service: end
+ * */
 /**
  * initial state of the reducer
  */
@@ -79,5 +90,6 @@ export const userSlice = createSlice({
 });
 
 export const userSelector = (state) => state.user;
+
 export const { clearState } = userSlice.actions;
 export default userSlice.reducer;
