@@ -47,7 +47,7 @@ public class PersonDao implements PersonDaoInterface {
     */
     @Override
     public int insertPerson(Person person) throws UsernameTakenException, EmailTakenException, PnrTakenException {
-        int id = person.getID();
+        System.out.println("test");
         String name = person.getName();
         String surname = person.getSurname();
         String pnr = person.getPnr();

@@ -10,7 +10,6 @@ import java.util.UUID;
 */
 public class Person {
     protected String name;
-    protected final int personID;
     protected String surname;
     protected String pnr;
     protected String email;
@@ -23,17 +22,15 @@ public class Person {
     * Constructor setting various values of a person.
     * @JsonProperty is used so that we can create a person using json filled requests.
     * @param  name of the person
-    * @param  personID of the person 
-    * @param  surname of the person 
+    * @param  surname of the person
     * @param  pnr of the person 
-    * @param  email of the person 
-    * @param  pasword of the person 
-    * @param  role_id of the person 
-    * @param  username of the person 
+    * @param  email that the person has.
+    * @param  password that the person has.
+    * @param  role_id that the person has.
+    * @param  username that the person has.
     */
     public Person(
             @JsonProperty("name") String name,
-            @JsonProperty("id") int personID,
             @JsonProperty("surname") String surname,
             @JsonProperty("pnr") String pnr,
             @JsonProperty("email") String email,
@@ -41,7 +38,6 @@ public class Person {
             @JsonProperty("role_id") int role_id,
             @JsonProperty("username") String username) {
         this.name = name;
-        this.personID = personID;
         this.surname = surname;
         this.pnr = pnr;
         this.email = email;
@@ -52,7 +48,6 @@ public class Person {
 
 
     public String getName(){return this.name;}
-    public int getID(){return this.personID;}
     public String getSurname(){return this.surname;}
     public String getPnr(){return this.pnr;}
     public String getEmail(){return this.email;}
