@@ -4,6 +4,7 @@ import { Navbar } from './features/navbar/navBar'
 import { SignIn } from './features/user/signIn/SignIn'
 import { SignUp } from './features/user/signUp/signUp'
 import { UserRecruit } from './features/user/userRecruit'
+import { ApplicationForm } from './features/user/usertypes/recruit/applicationForm'
 import './App.css';
 import {BrowserRouter as Router, Routes, Switch, Route} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -23,7 +24,7 @@ return(
   <Router>
     <Navbar/>
     <Routes>
-    <Route exact path='/' element={<Home/>}/>
+    <Route exact path='/' element={<ApplicationForm/>}/>
     <Route path='/SignUp' element={<SignUp/>}/>
     <Route path='/SignIn' element={<SignIn/>}/>
     <Route path='/UserRecruit' element={<UserRecruit/>}/>
