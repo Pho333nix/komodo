@@ -28,20 +28,9 @@ export const signInUser = createAsyncThunk('user/signInUser',async(credentials, 
  *  removes the jwt token stored in localStorage
  * */
 export const logout = createAsyncThunk("user/logout", async() =>{
-  await authService.logout
+  await authService.logout()
 });
-/**
- * Authentication service: end
- * */
-/**
- * initial state of the reducer
- */
-/*const initialState = {
-  isLoggedIn: false,
-  status: 'idle',
-  res: ' '
-};
-*/
+
 const initialState = user ?
       {isLoggedIn: true, res : user,  status: 'idle'} :
       {isLoggedIn: false, res: null, status: 'idle'}
@@ -85,6 +74,10 @@ export const userSlice = createSlice({
       state.res = action.payload;
       state.isLoggedIn = false;
     },
+    [logout.fulfilled]: (state, action)=>{
+      state.isLoggedIn = false;
+      state.res = null;
+    }
   }
 });
 

@@ -1,14 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {useSelector, useDispatch} from 'react-redux';
-import { signUpUser, userSelector } from './UserSlice'
-
+import { userSelector, logout } from './UserSlice'
+import { useNavigate } from 'react-router-dom';
 export function UserRecruit(){
 
-const state = useSelector(userSelector);
+  const { res: user } = useSelector(userSelector);
+const navigate = useNavigate();
+const dispatch = useDispatch();
 
-  return(<div><h1>Recruit profile page</h1>
-         {Object.entries(state).map(([key, value])=>{
-           <h2>key:value</h2>
-         })}
+  useEffect(()=>{
+  if(!user){
+    navigate("/SignIn")
+  }
+  },[user]);
+
+  const handleLogout = () =>{
+    dispatch(logout())
+  }
+  return(<div>
+           <h1>Recruit profile page</h1>
+           <button onClick={handleLogout}>logout</button>
          </div>)
 }
