@@ -52,16 +52,37 @@ public class DatabaseService {
     * @return          the credentials relating to a specific person.
     */
     public String[] getCredentials(String username) throws UsernameNotFoundException{
+        String[] cred = new String[2];
         try{
-            return persondao.getCredentials(username);
+            cred[0] = persondao.getEmail(username);
+            cred[0] = persondao.getUserId(username);
         }catch(Exception e){
-            logger.error("Unable to get credentials");
+            logger.error("CREDENTIALS NOT FOUND");
             return null;
         }
-
+        return cred;
     }
 
     public Person getPersonObject(String email) throws DataNotFoundException {
-        return persondao.getPersonObject(email);
+        String name = persondao.getName(email);
+        String surname = persondao.getSurname(email);
+        String pnr = persondao.getPnr(email);
+        int role = persondao.getRoleid(email);
+        String mail = persondao.getEmail(email);
+        String password;
+        String username;
+        try{
+            password = persondao.getPassword(email);
+        }catch(Exception e){
+            logger.error("No email found");
+            password = "";
+        }
+        try{
+            username = persondao.getUsername(email);
+        }catch(Exception e){
+            logger.error("no username found");
+            username = "";
+        }
+        return new Person(name, surname, pnr, mail, password, role, username);
     }
 }
