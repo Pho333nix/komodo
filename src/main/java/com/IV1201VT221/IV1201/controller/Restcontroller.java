@@ -45,15 +45,6 @@ public class Restcontroller {
         this.databaseservice = databaseservice;
     }
 
-    /**
-    * Returns a user given a particular username 
-    * @param  username The username to be retrieved 
-    * @return          The user retrieved from the database.
-    */
-    @RequestMapping(value = "/api/auth/{username}", method = RequestMethod.GET)
-    public String getUser(@PathVariable String username) throws UsernameNotFoundException {
-        return databaseservice.getPerson(username);
-    }
 
     /**
     * Returns credentials of a user given a particular username 
@@ -77,16 +68,22 @@ public class Restcontroller {
         return databaseservice.insertPerson(person);
     }
 
+    /**
+     * Fetch a person object form database with the provided email as identifier
+     * @param email to get object from
+     * @return person object
+     * @throws DataNotFoundException
+     */
     @RequestMapping(value = "/api/user/{email}", method = RequestMethod.GET)
     public Person getPersonObject(@PathVariable String email) throws DataNotFoundException {
         return databaseservice.getPersonObject(email);
     }
 
-    /*
-    Returns a valid jwt token and a person object for a user
-    @param username
-    @param password
-    @return jwt token, person object
+    /**
+     * Create a jwt token for the posted user and return the token and user object
+     * @param authenticationRequest with username and passwrod
+     * @return jwt token and person object
+     * @throws Exception
      */
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{

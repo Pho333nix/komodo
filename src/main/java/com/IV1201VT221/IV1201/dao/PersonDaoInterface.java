@@ -12,12 +12,8 @@ import java.util.UUID;
 * PersonDaoInterface for interacting with the database.
 */
 public interface PersonDaoInterface {
-    int insertPerson(Person user) throws UsernameTakenException, EmailTakenException, PnrTakenException;
     int updatePerson(int id, Person person);
     int deletePerson(int id, Person person);
-    String getPerson(String username) throws UsernameNotFoundException;
-    //String[] getCredentials(String username) throws UsernameNotFoundException;
-    //Person getPersonObject(String email);
     String getName(String email);
     String getEmail(String email);
     String getPnr(String email);
@@ -26,4 +22,9 @@ public interface PersonDaoInterface {
     String getPassword(String email);
     int getRoleid(String email);
     String getUserId(String email);
+    int insertPerson(String name, String surname, String pnr, String email, String password,
+                     int role_id, String username);
+    int getPnrCount(String pnr) throws PnrTakenException;
+    int getEmailCount(String email) throws EmailTakenException;
+    int getUsernameCount(String username) throws UsernameTakenException;
 }
