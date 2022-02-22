@@ -55,7 +55,7 @@ public class DatabaseService {
         String[] cred = new String[2];
         try{
             cred[0] = persondao.getEmail(username);
-            cred[0] = persondao.getUserId(username);
+            cred[1] = persondao.getUserId(username);
         }catch(Exception e){
             logger.error("CREDENTIALS NOT FOUND");
             return null;

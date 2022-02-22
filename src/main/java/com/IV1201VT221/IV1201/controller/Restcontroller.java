@@ -3,6 +3,7 @@ package com.IV1201VT221.IV1201.controller;
 import com.IV1201VT221.IV1201.exceptions.*;
 import com.IV1201VT221.IV1201.model.AuthenticationRequest;
 import com.IV1201VT221.IV1201.model.AuthenticationResponse;
+import com.IV1201VT221.IV1201.model.JwtPerson;
 import com.IV1201VT221.IV1201.model.Person;
 import com.IV1201VT221.IV1201.service.DatabaseService;
 import com.IV1201VT221.IV1201.service.MyUserDetailsService;
@@ -68,7 +69,7 @@ public class Restcontroller {
 
     /**
     * Inserts a user into the database
-    * @param  Person A person object
+    * @param  person A person object
     * @return        A integer representing if the insertion was successful or not. 
     */
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
@@ -82,10 +83,10 @@ public class Restcontroller {
     }
 
     /*
-    Returns a valid jwt token for a user
+    Returns a valid jwt token and a person object for a user
     @param username
     @param password
-    @return jwt token
+    @return jwt token, person object
      */
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
@@ -104,9 +105,13 @@ public class Restcontroller {
                 authenticationRequest.getUsername()
         );
         final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
-
-
+        Person p;
+        try{
+            p = databaseservice.getPersonObject(authenticationRequest.getUsername());
+        }catch(Exception e){
+            logger.error("person not found in database, with username: " + authenticationRequest.getUsername());
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        return ResponseEntity.ok(new JwtPerson(jwt, p));
     }
 }
