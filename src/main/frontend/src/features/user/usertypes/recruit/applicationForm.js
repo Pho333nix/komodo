@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Formik, Form, Field, FieldArray } from 'formik';
-
+import { userSelector } from '../../UserSlice'
 export const ApplicationForm = () =>(
 
   <div>
@@ -49,7 +50,9 @@ export const ApplicationForm = () =>(
 
 </div>
 
-)
+);
+
+
 
 /*
  *   <Formik
