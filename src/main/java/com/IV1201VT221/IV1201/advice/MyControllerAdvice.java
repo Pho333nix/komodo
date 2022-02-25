@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 /**
-* Global exception handler.
+* Global exception handling...
 * @ControllerAdvice allows us to handle exceptions globally
 * It will handle exceptions thrown by methods annotated with @RequestMapping or
 *   Get
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class MyControllerAdvice {
     /**
-    * Exception handler for UsernameTakenException.
+    * Exceptionhandler for UsernameTakenException.
     * @param  UsernameTakenException a UsernameTakenException object
     * @return                        A ResponseEntity representing the whole HTTP response. 
     */
@@ -30,7 +30,7 @@ public class MyControllerAdvice {
     }
 
     /**
-    * Exception handler for EmailTakenExcepton.
+    * Exceptionhandler for EmailTakenExcepton.
     * @param  UsernameTakenException a EmailTakenException object
     * @return                        A ResponseEntity representing the whole HTTP response. 
     */
@@ -40,12 +40,21 @@ public class MyControllerAdvice {
     }
 
     /**
-    * Exception handler for PnrTakenException.
+    * Exceptionhandler for PnrTakenException.
     * @param  PnrTakenException a PnrTakenException object
-    * @return                   A PnrTakenException representing the whole HTTP response. 
+    * @return                   A ResponseEntity representing the whole HTTP response.
     */
     @ExceptionHandler(value = {PnrTakenException.class})
     public ResponseEntity <String> PnrTakenException(PnrTakenException e){
         return new ResponseEntity<String>("Pnr is taken", HttpStatus.BAD_REQUEST);
+    }
+    /**
+     * Exceptionhandler for PnrTakenException.
+     * @param  Exception a generic excepion
+     * @return                   A ResponseEntity representing which gives a generic message
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity <String> genericException(Exception e){
+        return new ResponseEntity<String>("Something went wrong :/", HttpStatus.BAD_REQUEST);
     }
 }

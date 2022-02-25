@@ -7,10 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
-* DatabaseService used for interacting with Dao's which in turn interact with the database. 
+* DatabaseService u sed for interacting with Dao's which in turn interact with the database.
 * This service is used because additional logic might be required before we truly want to interact with the database.
 */
 @Service
@@ -19,6 +21,8 @@ public class DatabaseService {
     private final PersonDao persondao;
     Logger logger = LoggerFactory.getLogger(DatabaseService.class);
 
+    PasswordEncoder passwordEncoder;
+
     /**
     * Constructor setting persondao object.
     * Persondao Object is used for calling methods within the persondao.
@@ -26,7 +30,9 @@ public class DatabaseService {
     @Autowired
     public DatabaseService(@Qualifier("postgres") PersonDao persondao){
         this.persondao = persondao;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
+
 
     /**
     * Used for inserting a person into the database
@@ -34,6 +40,9 @@ public class DatabaseService {
     * @return        An integer representing if the insertion was successful or now 
     */
     public int insertPerson(Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
+        int x = 1/0;
+        String encodedPassword = this.passwordEncoder.encode(person.getPassword());
+        person.setPassword(encodedPassword);
         return persondao.insertPerson(person);
     }
 

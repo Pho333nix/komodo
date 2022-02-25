@@ -5322,6 +5322,7 @@ COPY public.person (person_id, name, surname, pnr, email, password, role_id, use
 1008	Simone	Whitehead	20060718-2363	simone.whitehead@finnsinte.se	\N	2	\N
 1009	Orla	Meadows	20040416-3432	orla.meadows5655@finnsinte.se	\N	2	\N
 1010	Kenyon	Solis	20070918-7181	s.kenyon@finnsinte.se	\N	2	\N
+1011	admin	admin	123456789-1111	admin@admin.admin	admin	2	admin
 \.
 
 

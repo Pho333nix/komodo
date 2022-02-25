@@ -51,8 +51,6 @@ public class Restcontroller {
     */
     @RequestMapping(value = "/api/auth/{username}", method = RequestMethod.GET)
     public String getUser(@PathVariable String username) throws UsernameNotFoundException {
-        System.out.println(username);
-        System.out.println("HEJ");
         return databaseservice.getPerson(username);
     }
 
