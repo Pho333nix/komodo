@@ -3,6 +3,7 @@ package com.IV1201VT221.IV1201.controller;
 import com.IV1201VT221.IV1201.exceptions.*;
 import com.IV1201VT221.IV1201.model.AuthenticationRequest;
 import com.IV1201VT221.IV1201.model.AuthenticationResponse;
+import com.IV1201VT221.IV1201.model.JwtPerson;
 import com.IV1201VT221.IV1201.model.Person;
 import com.IV1201VT221.IV1201.service.DatabaseService;
 import com.IV1201VT221.IV1201.service.MyUserDetailsService;
@@ -45,16 +46,6 @@ public class Restcontroller {
     }
 
     /**
-    * Returns a user given a particular username 
-    * @param  username The username to be retrieved 
-    * @return          The user retrieved from the database.
-    */
-    @RequestMapping(value = "/api/auth/{username}", method = RequestMethod.GET)
-    public String getUser(@PathVariable String username) throws UsernameNotFoundException {
-        return databaseservice.getPerson(username);
-    }
-
-    /**
     * Returns credentials of a user given a particular username 
     * @param  username The username which credentials is to be retrieved 
     * @return          The credentials retrieved from the database
@@ -68,7 +59,7 @@ public class Restcontroller {
 
     /**
     * Inserts a user into the database
-    * @param  Person A person object
+    * @param  person A person object
     * @return        A integer representing if the insertion was successful or not. 
     */
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
@@ -76,16 +67,22 @@ public class Restcontroller {
         return databaseservice.insertPerson(person);
     }
 
+    /**
+     * Fetch a person object form database with the provided email as identifier
+     * @param email to get object from
+     * @return person object
+     * @throws DataNotFoundException
+     */
     @RequestMapping(value = "/api/user/{email}", method = RequestMethod.GET)
     public Person getPersonObject(@PathVariable String email) throws DataNotFoundException {
         return databaseservice.getPersonObject(email);
     }
 
-    /*
-    Returns a valid jwt token for a user
-    @param username
-    @param password
-    @return jwt token
+    /**
+     * Create a jwt token for the posted user and return the token and user object
+     * @param authenticationRequest with username and passwrod
+     * @return jwt token and person object
+     * @throws Exception
      */
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
@@ -94,19 +91,19 @@ public class Restcontroller {
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
                             authenticationRequest.getPassword())
             );
-
         }catch(BadCredentialsException e){
-            logger.error("INCORRECT CREDENTIALS", e);
             throw new Exception("incorrect credentials", e);
         }
-
         final UserDetails userDetails = userDetailsService.loadUserByUsername(
                 authenticationRequest.getUsername()
         );
         final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
-
-
+        Person p;
+        try{
+            p = databaseservice.getPersonObject(authenticationRequest.getUsername());
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        return ResponseEntity.ok(new JwtPerson(jwt, p));
     }
 }

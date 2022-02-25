@@ -40,19 +40,34 @@ public class DatabaseService {
     * @return        An integer representing if the insertion was successful or now 
     */
     public int insertPerson(Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
-        int x = 1/0;
-        String encodedPassword = this.passwordEncoder.encode(person.getPassword());
-        person.setPassword(encodedPassword);
-        return persondao.insertPerson(person);
-    }
+        String name = person.getName();
+        String surname = person.getSurname();
+        String pnr = person.getPnr();
+        String email = person.getEmail();
+        String password = person.getPassword();
+        int role_id = person.getRoleid();
+        String username = person.getUsername();
 
-    /**
-    * Used for getting a person from the database
-    * @param  username of the person we want to retrieved.
-    * @return        integer representing if the insertion was successful or now 
-    */
-    public String getPerson(String username) throws UsernameNotFoundException{
-        return persondao.getPerson(username);
+        if(persondao.getUsernameCount(username) != 0){
+            logger.error("Username already exists");
+            throw new UsernameTakenException("");
+        }
+        if(persondao.getEmailCount(email) != 0){
+            logger.error("Email already exists");
+            throw new EmailTakenException("");
+        }
+        if(persondao.getPnrCount(pnr) != 0){
+            logger.error("Person number already exists");
+            throw new PnrTakenException("");
+        }
+        try{
+            String encodedPassword = this.passwordEncoder.encode(person.getPassword());
+            person.setPassword(encodedPassword);
+            return persondao.insertPerson(name, surname, pnr, email, password, role_id, username);
+        }catch(Exception e){
+            logger.error("Could not add person to database, check connection");
+            return 0;
+        }
     }
 
     /**
@@ -61,16 +76,43 @@ public class DatabaseService {
     * @return          the credentials relating to a specific person.
     */
     public String[] getCredentials(String username) throws UsernameNotFoundException{
+        String[] cred = new String[2];
         try{
-            return persondao.getCredentials(username);
+            cred[0] = persondao.getEmail(username);
+            cred[1] = persondao.getUserId(username);
         }catch(Exception e){
-            logger.error("Unable to get credentials");
+            logger.error("CREDENTIALS NOT FOUND");
             return null;
         }
-
+        return cred;
     }
 
+    /**
+     * Get all info about a person from db given an email
+     * @param email email pointing to a user
+     * @return person object
+     * @throws DataNotFoundException
+     */
     public Person getPersonObject(String email) throws DataNotFoundException {
-        return persondao.getPersonObject(email);
+        String name = persondao.getName(email);
+        String surname = persondao.getSurname(email);
+        String pnr = persondao.getPnr(email);
+        int role = persondao.getRoleid(email);
+        String mail = persondao.getEmail(email);
+        String password;
+        String username;
+        try{
+            password = persondao.getPassword(email);
+        }catch(Exception e){
+            logger.error("No email found");
+            password = "";
+        }
+        try{
+            username = persondao.getUsername(email);
+        }catch(Exception e){
+            logger.error("no username found");
+            username = "";
+        }
+        return new Person(name, surname, pnr, mail, password, role, username);
     }
 }

@@ -19,7 +19,7 @@ class PersonDaoTest {
 
     @Autowired
     PersonDao persondao;
-
+    /*
     @Test
     @Transactional
     @Rollback(true)
@@ -46,7 +46,7 @@ class PersonDaoTest {
         }
         //then
         assertThat(expected).isEqualTo(1);
-    }
+    }*/
 
     @Test
     void updatePerson() {
