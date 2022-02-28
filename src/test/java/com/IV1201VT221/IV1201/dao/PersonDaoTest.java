@@ -19,41 +19,22 @@ class PersonDaoTest {
 
     @Autowired
     PersonDao persondao;
-    /*
     @Test
     @Transactional
     @Rollback(true)
     void insertPerson() {
         //given
-        Person person = new Person("name",
-                "surname",
-                "123456789",
-                "asd@xd.com",
-                "passwerd",
-                1,
-                "username"
-        );
-        int expected = 0;
-        try {
-            //when
-            expected = persondao.insertPerson(person);
-        } catch (UsernameTakenException e) {
-            e.printStackTrace();
-        } catch (EmailTakenException e) {
-            e.printStackTrace();
-        } catch (PnrTakenException e) {
-            e.printStackTrace();
-        }
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+        //when
+        int expected = persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
         //then
         assertThat(expected).isEqualTo(1);
-    }*/
-
-    @Test
-    void updatePerson() {
-    }
-
-    @Test
-    void deletePerson() {
     }
 
     @Test
@@ -61,95 +42,209 @@ class PersonDaoTest {
     @Rollback(true)
     void getCredentials() {
         //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
         String password = "password";
+        int role_id = 1;
         String username = "username";
 
-        Person person = new Person("name",
-                "surname",
-                "123456789",
-                "asd@xd.com",
-                password,
-                1,
-                username
-        );
-
-        try {
-            //when
-            persondao.insertPerson(person);
-            //String[] credentials = persondao.getCredentials(username);
-            //String expectedPassword = credentials[0];
-            //String expectedUsername = credentials[1];
-            //then
-            //assertThat(expectedPassword).isEqualTo(password);
-            //assertThat(expectedUsername).isEqualTo(username);
-            assertThat(1).isEqualTo(1);
-        } catch (UsernameTakenException e) {
-        e.printStackTrace();
-        } catch (EmailTakenException e) {
-        e.printStackTrace();
-        } catch (PnrTakenException e) {
-        e.printStackTrace();
-        }
-    }
-
-    @Test
-    void getPerson() {
-        //given
-        String username = "username";
-        String email = "email@asdasdasd.com";
-        Person person = new Person("name",
-            "surname",
-            "123456789",
-            email,
-            "passwerd",
-            1,
-            username
-        );
-        String expected = "";
-        try {
-            //when
-            persondao.insertPerson(person);
-            expected = persondao.getPerson(email);
-            //then
-            assertThat(expected).isEqualTo(email);
-        } catch (UsernameTakenException e) {
-            e.printStackTrace();
-        } catch (EmailTakenException e) {
-            e.printStackTrace();
-        } catch (PnrTakenException e) {
-            e.printStackTrace();
-        } catch (UsernameNotFoundException e) {
-            e.printStackTrace();
-        }
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        //String[] credentials = persondao.getCredentials(username);
+        //String expectedPassword = credentials[0];
+        //String expectedUsername = credentials[1];
+        //then
+        //assertThat(expectedPassword).isEqualTo(password);
+        //assertThat(expectedUsername).isEqualTo(username);
+        assertThat(1).isEqualTo(1);
     }
 
     @Test
     @Transactional
     @Rollback(true)
-    void getPersonObject() {
+    void getPnrCount() throws PnrTakenException {
         //given
-        String email = "email@domain.com";
-        Person personToInsert = new Person("name",
-                "surname",
-                "123456789",
-                email,
-                "passwerd",
-                1,
-                "username"
-        );
-        Person expected;
-        try {
-            //when
-            persondao.insertPerson(personToInsert);
-            expected = persondao.getPersonObject(email);
-            //then
-            assertThat(expected).usingRecursiveComparison().isEqualTo(personToInsert);
-        } catch (UsernameTakenException e) {
-            e.printStackTrace();
-        } catch (EmailTakenException e) {
-            e.printStackTrace();
-        } catch (PnrTakenException e) {
-            e.printStackTrace();
-        }
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        int expected = persondao.getPnrCount(pnr);
+        //then
+        assertThat(expected).isEqualTo(1);
     }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getEmailCount() throws EmailTakenException {
+        //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        int expected = persondao.getEmailCount(email);
+        //then
+        assertThat(expected).isEqualTo(1);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getUsernameCount() throws UsernameTakenException {
+        //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        int expected = persondao.getUsernameCount(username);
+        //then
+        assertThat(expected).isEqualTo(1);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getName() {
+        //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        String expected = persondao.getName(email);
+        //then
+        assertThat(expected).isEqualTo(name);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getPnr() {
+        //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        String expected = persondao.getPnr(email);
+        //then
+        assertThat(expected).isEqualTo(pnr);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getSurname() {
+        //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        String expected = persondao.getSurname(email);
+        //then
+        assertThat(expected).isEqualTo(surname);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getPassword() {
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getUsername() {
+        //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        String expected = persondao.getUsername(email);
+        //then
+        assertThat(expected).isEqualTo(username);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getRoleid() {
+        //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        int expected = persondao.getRoleid(email);
+        //then
+        assertThat(expected).isEqualTo(role_id);
+    }
+
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getEmail() {
+        //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+
+        //when
+        persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
+        String expected = persondao.getEmail(email);
+        //then
+        assertThat(expected).isEqualTo(email);
+    }
+
 }

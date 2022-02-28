@@ -1,30 +1,40 @@
 package com.IV1201VT221.IV1201.controller;
 
+import com.IV1201VT221.IV1201.dao.PersonDao;
 import com.IV1201VT221.IV1201.model.Person;
 import com.IV1201VT221.IV1201.service.DatabaseService;
+import com.IV1201VT221.IV1201.service.MyUserDetailsService;
+import com.IV1201VT221.IV1201.util.JwtUtil;
 import org.assertj.core.api.Assertions;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest
-@RunWith(SpringRunner.class)
+@WebMvcTest(controllers = Restcontroller.class)
 class RestcontrollerTest {
 
     @Autowired
@@ -32,6 +42,10 @@ class RestcontrollerTest {
 
     @MockBean
     private DatabaseService service;
+    @MockBean
+    private MyUserDetailsService userDetailsService;
+    @MockBean
+    private JwtUtil jwtTokenUtil;
 
     @Test
     void getUser() {
@@ -43,16 +57,27 @@ class RestcontrollerTest {
 
     @Test
     void insertUser() throws Exception {
-        Person person = new Person("test", "tes", "123456789", "email", "password",1, "username");
+        //given
+        String name = "name";
+        String surname = "surname";
+        String pnr = "123456789-1011";
+        String email =  "email";
+        String password = "password";
+        int role_id = 1;
+        String username = "username";
+        Person person = new Person(name,surname,pnr,email,password,role_id,username);
+
+        //when
         when(service.insertPerson(person)).thenReturn(1);
-        /*this.mockMvc
+
+        //then
+        this.mockMvc
                 .perform(post("/api/ins")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\":\"test\", \"surname\": \"tes\", \"pnr\":\"123456789\", \"email\": \"email\", \"password\":\"password\", \"role_id\": \"1\", \"username\":\"username\"}"))
+                    .content("{\"name\":\"name\", \"surname\": \"surname\", \"pnr\":\"123456789-1011\", \"email\": \"email\", \"password\":\"password\", \"role_id\": 1, \"username\":\"username\"}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("test")))
-                .andExpect(status().isOk());
-                */
+                .andExpect(content().value(1));
+
     }
 
     @Test
