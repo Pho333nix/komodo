@@ -1,5 +1,6 @@
 package com.IV1201VT221.IV1201.controller;
 
+import com.IV1201VT221.IV1201.dao.PersonDao;
 import com.IV1201VT221.IV1201.exceptions.*;
 import com.IV1201VT221.IV1201.model.AuthenticationRequest;
 import com.IV1201VT221.IV1201.model.AuthenticationResponse;
@@ -17,6 +18,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
 * Controller for handling incoming HTTP requests.
@@ -56,6 +59,33 @@ public class Restcontroller {
         String[] cred = new String[2];
         cred = databaseservice.getCredentials(username);
         return cred;
+    }
+
+    /**
+     * Returns all competence from database
+     * @return List with competence
+     */
+    @RequestMapping(value = "/api/competence/", method = RequestMethod.GET)
+    public ResponseEntity<?> getCompetence(@RequestHeader (name="Authorization") String token) throws DataNotFoundException {
+        int roleId = 0;
+        String jwtToken = token.substring(7);
+        String email = jwtTokenUtil.extractUsername(jwtToken);
+        try{
+            roleId = databaseservice.getRoleId(email);
+        }catch(Exception e){
+            logger.error("user not in db/controller");
+            return ResponseEntity.badRequest().body("user does not exist");
+        }
+        if(roleId == 2){
+            try{
+                return ResponseEntity.ok(databaseservice.getAllCompetence());
+            }catch(Exception e){
+                logger.error("Error accessing competences");
+                return ResponseEntity.badRequest().body("Could not get competence");
+            }
+        }else{
+            return ResponseEntity.badRequest().body("Unauthorized access");
+        }
     }
 
     /**

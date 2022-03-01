@@ -8,6 +8,7 @@ import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
 import com.IV1201VT221.IV1201.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -167,6 +168,19 @@ public class PersonDao implements PersonDaoInterface {
         String sqlString = "SELECT password FROM person WHERE email = ?";
         String password = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
         return password;
+    }
+
+    @Override
+    public List<String> getAllCompetence(){
+        String sqlString = "SELECT name FROM competence";
+        List<String> competences = jdbcTemplate.query(
+                sqlString,
+                (rs, rowNum) ->
+                        new String(
+                                rs.getString("name")
+                        )
+        );
+        return competences;
     }
 
     /**

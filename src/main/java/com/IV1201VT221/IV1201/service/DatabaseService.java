@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
+import java.util.List;
+
 /**
 * DatabaseService used for interacting with Dao's which in turn interact with the database. 
 * This service is used because additional logic might be required before we truly want to interact with the database.
@@ -74,7 +77,7 @@ public class DatabaseService {
             cred[1] = persondao.getUserId(username);
         }catch(Exception e){
             logger.error("CREDENTIALS NOT FOUND");
-            return null;
+            throw new UsernameNotFoundException("");
         }
         return cred;
     }
@@ -95,16 +98,31 @@ public class DatabaseService {
         String username;
         try{
             password = persondao.getPassword(email);
+            throw new DataNotFoundException("");
         }catch(Exception e){
-            logger.error("No email found");
+            logger.error("No password found");
             password = "";
         }
         try{
             username = persondao.getUsername(email);
+            throw new DataNotFoundException("");
         }catch(Exception e){
             logger.error("no username found");
             username = "";
         }
         return new Person(name, surname, pnr, mail, password, role, username);
+    }
+
+    public List<String> getAllCompetence(){
+        return persondao.getAllCompetence();
+    }
+
+    public int getRoleId(String email) throws DataNotFoundException{
+        try{
+            return persondao.getRoleid(email);
+        }catch(Exception e){
+            logger.error("User not found in db");
+            throw new DataNotFoundException("");
+        }
     }
 }
