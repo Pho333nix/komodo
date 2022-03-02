@@ -23,7 +23,6 @@ export function SignUp(){
       pnr: '',
       email: '',
       password: '',
-      role_id: 1,
       username: '',
     }
   });
@@ -45,27 +44,12 @@ const required = value => {
     );
   }
 };
-  /**
-   * @function emailValidate
-   * alerts user if the email provided is
-   * incalid.
-   * @param { value } is the user provided email
-   * */
-/*const emailValidate = value => {
-  if (!isEmail(value)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This is not a valid email.
-      </div>
-    );
-  }
-};
-*/
 useEffect(()=>{
     if(status === 'success'){
-      console.log("success")
+      setErrorMsg('');
+      navigate("/SignIn")
     }else if(status === 'error'){
-      setErrorMsg(res)
+      setErrorMsg(res.message)
     }
   },[status, errorMsg])
   //TODO: make sure button is only clickable if we filled all values
@@ -79,7 +63,6 @@ useEffect(()=>{
               .required("This field is required!"),
     email: Yup.string().email("This is not a valid email.")
               .required("This field is required!"),
-    role_id: Yup.number().min(1).max(1).required("This field is required!"),
   });
 
  
@@ -93,14 +76,12 @@ useEffect(()=>{
       pnr,
       email,
       password,
-      role_id,
       username} = formValue;
     dispatch(signUpUser( { name,
       surname,
       pnr,
       email,
       password,
-      role_id,
       username}))
 
   }
@@ -161,13 +142,6 @@ useEffect(()=>{
       <ErrorMessage name="surname"
                     className="alert alert-danger" />
       <br/>
-     </div>
-     <div>
-       <select name="role_id">
-         role:
-         <option name="role_id" value="2">recruit</option>
-         <option  name="role_id" value="1">recruiter</option>
-       </select>
      </div>
      <button className="button" type="submit" >
       Sign up!
