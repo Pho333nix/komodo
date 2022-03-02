@@ -10,12 +10,18 @@ export const PersonalInformation = () =>{
   useEffect(()=>{
     if( res && isLoggedIn){
       setUser(res.person)
-      console.log("person: " + JSON.stringify(user));
+      console.log("person: " + JSON.stringify(res.person));
     }
   },[isLoggedIn, res, user, setUser])
 
-  return(Object.keys(user).map((key, val) => {
+  return(
+  <Formik>
+  <Form>
+  {Object.keys(user).map((key, val) => {
     if(key !== 'roleid') return <div key={key}>{key + ': ' + user[key]}
     </div>
-  }));
+  })};
+  </Form>
+  </Formik>
+  )
 }

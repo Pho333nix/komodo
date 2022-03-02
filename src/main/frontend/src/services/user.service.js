@@ -16,9 +16,14 @@ const getRecruiterPage = ()=> {
     return axios.get(API_URL + "/user/recruiter", {headers: authHeader()})
   }
 
+const getCompetenceList = () =>{
+    return axios.get(API_URL + "/api/competence", {headers: authHeader()})
+}
+
 const userService ={
   getRecruitPage,
   getRecruiterPage,
+  getCompetenceList
 }
 
 export default userService;

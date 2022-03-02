@@ -23,7 +23,7 @@ const dispatch = useDispatch();
     dispatch(logout())
   }
 
-  const renderUser = () =>{
+  const renderRecruit = () =>{
     return(<div className="container">
              <p>Welcome to your personal page {currentUser.name} please
                use the navigation bar on top of the page
@@ -33,9 +33,19 @@ const dispatch = useDispatch();
 
            </div>)
   }
+
+  const renderRecruiter = () =>{
+     return(<div className="container">
+             <p>Welcome to your personal page {currentUser.name} please
+               use the navigation bar on top of the page
+               to do some of the following: change profile info, go through applications
+               and more.
+             </p>
+           </div>)
+  }
   return(<div>
            <h1>Recruit profile page</h1>
-           { renderUser() }
+           {currentUser.roleid == 1 ?  renderRecruiter() : renderRecruit() }
            <button onClick={handleLogout}>logout</button>
          </div>)
 }
