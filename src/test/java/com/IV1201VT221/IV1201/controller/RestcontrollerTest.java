@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,6 +30,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -68,7 +71,7 @@ class RestcontrollerTest {
         Person person = new Person(name,surname,pnr,email,password,role_id,username);
 
         //when
-        when(service.insertPerson(person)).thenReturn(1);
+        when(service.insertPerson(ArgumentMatchers.any(Person.class))).thenReturn(1);
 
         //then
         this.mockMvc
@@ -76,7 +79,7 @@ class RestcontrollerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\":\"name\", \"surname\": \"surname\", \"pnr\":\"123456789-1011\", \"email\": \"email\", \"password\":\"password\", \"role_id\": 1, \"username\":\"username\"}"))
                 .andExpect(status().isOk())
-                .andExpect(content().value(1));
+                .andExpect(content().string("1"));
 
     }
 
