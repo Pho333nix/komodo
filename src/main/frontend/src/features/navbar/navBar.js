@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { useDispatch, useSelector} from 'react-redux';
 import { signInUser, userSelector, personSelector, logout } from '../user/UserSlice'
 
+
 export function Navbar (){
   const { isLoggedIn, res } = useSelector(userSelector);
   const [ loggedInNavBar, setLoggedInNavbar] = useState(false);
@@ -17,11 +18,13 @@ export function Navbar (){
       setLoggedInNavbar(false)
       setCurrentUser(null);
     }
-  },[isLoggedIn, setLoggedInNavbar])
+  },[isLoggedIn, setLoggedInNavbar, res])
+
   const handleLogOut = () =>{
     dispatch(logout());
   }
-  if(loggedInNavBar){
+const recruitNavbar = () =>{
+      console.log('logged in navbar')
     return(
     <nav>
       <div className='containter'>
@@ -32,8 +35,22 @@ export function Navbar (){
         </ul>
       </div>
     </nav>);
-  }
-  return(
+}
+const recruiterNavbar = () =>{
+      console.log('logged in navbar')
+    return(
+    <nav>
+      <div className='containter'>
+        <ul>
+          <li><NavLink to='/application'>Application Forms</NavLink></li>
+          <li><NavLink to='/UserRecruit'>{currentUser.name}</NavLink></li>
+          <li><a href='/SignIn' onClick={handleLogOut}>Log out</a></li>
+        </ul>
+      </div>
+    </nav>);
+}
+  const defaultNavbar = () =>{
+     return(
     <nav>
       <div className='containter'>
         <ul>
@@ -44,5 +61,13 @@ export function Navbar (){
       </div>
     </nav>
   );
+  }
+  if(loggedInNavBar){
+    return currentUser.roleid === 2 ? recruitNavbar() : recruiterNavbar();
+  }else{
+    return defaultNavbar();
+  }
+
+
 }
 

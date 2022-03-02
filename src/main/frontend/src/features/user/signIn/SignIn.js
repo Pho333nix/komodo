@@ -28,9 +28,9 @@ export function SignIn(){
   useEffect(()=>{
     if(isLoggedIn){
       navigate("/UserRecruit")
-      console.log('navigating: ', res);
+      setErrorMsg('')
     }else if(status === 'error'){
-      setErrorMsg(res)
+      setErrorMsg(res.message)
     }
 
   },[errorMsg, isLoggedIn, navigate, res, status])

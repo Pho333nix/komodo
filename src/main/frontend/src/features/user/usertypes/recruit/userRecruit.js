@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 export function UserRecruit(){
 
 const { res, isLoggedIn } = useSelector(userSelector);
-  const [currentUser, setCurrentUser] = useState({ currentUser: '' });
+const [currentUser, setCurrentUser] = useState({ currentUser: null });
 const navigate = useNavigate();
 const dispatch = useDispatch();
 
@@ -14,6 +14,7 @@ const dispatch = useDispatch();
   if(!res || !isLoggedIn){
     navigate("/SignIn")
   }else{
+    setCurrentUser(res.person);
   }
   },[navigate, res, isLoggedIn]);
 
@@ -22,10 +23,9 @@ const dispatch = useDispatch();
     dispatch(logout())
   }
 
-  const renderUser = () =>{
-    //setCurrentUser({currentUser: res.person})
+  const renderRecruit = () =>{
     return(<div className="container">
-             <p>Welcome to your personal page, please
+             <p>Welcome to your personal page {currentUser.name} please
                use the navigation bar on top of the page
                to do some of the following: change profile info, apply for
                a job or see your application status.
@@ -33,9 +33,19 @@ const dispatch = useDispatch();
 
            </div>)
   }
+
+  const renderRecruiter = () =>{
+     return(<div className="container">
+             <p>Welcome to your personal page {currentUser.name} please
+               use the navigation bar on top of the page
+               to do some of the following: change profile info, go through applications
+               and more.
+             </p>
+           </div>)
+  }
   return(<div>
            <h1>Recruit profile page</h1>
-           { renderUser() }
+           {currentUser.roleid == 1 ?  renderRecruiter() : renderRecruit() }
            <button onClick={handleLogout}>logout</button>
          </div>)
 }

@@ -1,17 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector} from 'react-redux';
 import { Formik, Form, Field, FieldArray } from 'formik';
-import { personSelector } from '../../UserSlice'
+import { userSelector, personSelector } from '../../UserSlice'
 
-const PersonalInformation = () =>{
-  const person = useSelector(personSelector);
+export const PersonalInformation = () =>{
+  const { isLoggedIn, res } = useSelector(userSelector);
+  const [user, setUser] = useState({user:null});
+
   useEffect(()=>{
-    if(person){
-      console.log("person: " + JSON.stringify(person));
+    if( res && isLoggedIn){
+      setUser(res.person)
+      console.log("person: " + JSON.stringify(res.person));
     }
-  },[person])
-  return(Object.keys(person).map((key, val) => {
-    <div>${key}</div>
+  },[isLoggedIn, res, user, setUser])
 
-  }));
+  return(
+  <Formik>
+  <Form>
+  {Object.keys(user).map((key, val) => {
+    if(key !== 'roleid') return <div key={key}>{key + ': ' + user[key]}
+    </div>
+  })};
+  </Form>
+  </Formik>
+  )
 }

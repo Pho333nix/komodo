@@ -1,38 +1,36 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Form, Field, FieldArray } from 'formik';
-import { userSelector } from '../../UserSlice'
-export const ApplicationForm = () =>(
+import { stateSelector } from './recruitSlice'
+import { PersonalInformation } from './PersonalInformation'
+import { getCompetenceList } from './recruitSlice';
+export const ApplicationForm = () =>{
 
+const [approved, setApproved] = useState(false);
+const [list, setList] = useState([]);
+const dispatch = useDispatch()
+  const navigate = useNavigate()
+const state = useSelector(stateSelector);
+
+  useEffect(()=>{
+    dispatch(getCompetenceList())
+    if(state.status == 'success'){
+      setList(state.list)
+    }else{
+    //  navigate("/SignIn")
+    }
+  });
+  return(
   <div>
     <h1>Application Form: </h1>
     <h2>Personal information:</h2>
     <h4>Get it from person object</h4>
+    <PersonalInformation/>
     <h2>Competens profile: </h2>
-    <Formik initialValues={{ competenceProfile: [''], startDate: '', endDate: '' }}
-          onSubmit={ values => alert(JSON.stringify(values))}>
-     {({ values })=>(
+
+    <Formik>
       <Form>
-        <FieldArray
-        name="competenceProfile"
-        render={arrayHelpers =>(
-          <div>{values.competenceProfile && values.competenceProfile.length > 0 ?(
-            values.competenceProfile.map((competence, index)=>(
-              <div key={index}>
-                <Field name={`competenceProfile.${index}`}/>
-              <button type="button"
-                      onClick={()=> arrayHelpers.remove(index)}> remove skill </button>
-                <br/>
-              <button type="button"
-                      onClick={()=> arrayHelpers.insert(index, '')}> Add another skill </button>
-              </div>
-            ))
-          ) : (
-            <button type="button"
-                    onClick={()=> arrayHelpers.push('')}>Add competency</button>
-          )}
-          </div>
-        )}/>
         <div>
         <label >start date: </label>
         <Field name="startDate" type="date"/>
@@ -44,21 +42,11 @@ export const ApplicationForm = () =>(
         <div>
           <button type="submit">Submit</button>
         </div>
-      </Form>
-    )}
-  </Formik>
-
-</div>
-
-);
+    </Form>
+    </Formik>
+      </div>
+)
+}
 
 
 
-/*
- *   <Formik
-      initialValues={{startDate:'', endDate:'', worHours:[], }}
-      onSubmit={(values, actions)=>{console.log(values)}}>
-
-  </Formik>
- *
- */

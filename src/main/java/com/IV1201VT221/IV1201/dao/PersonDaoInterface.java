@@ -6,6 +6,7 @@ import com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException;
 import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
 import com.IV1201VT221.IV1201.model.Person;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,4 +28,5 @@ public interface PersonDaoInterface {
     int getPnrCount(String pnr) throws PnrTakenException;
     int getEmailCount(String email) throws EmailTakenException;
     int getUsernameCount(String username) throws UsernameTakenException;
+    List<String> getAllCompetence();
 }
