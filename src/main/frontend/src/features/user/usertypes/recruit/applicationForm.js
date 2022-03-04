@@ -17,6 +17,7 @@ const state = useSelector(stateSelector);
     dispatch(getCompetenceList())
     if(state.status == 'success'){
       setList(state.list)
+
     }else{
     //  navigate("/SignIn")
     }

@@ -7,17 +7,17 @@
  */
 import axios from 'axios';
 import authHeader from './auth-headers';
-const API_URL = '//localhost:8080/auth';
+const API_URL = 'http://localhost:8080';
 
   const getRecruitPage = ()=> {
-    return axios.get(API_URL + "/user/recruit", {headers: authHeader()})
+    return axios.get(API_URL + "/auth/user/recruit", {headers: authHeader()})
   }
 const getRecruiterPage = ()=> {
-    return axios.get(API_URL + "/user/recruiter", {headers: authHeader()})
+    return axios.get(API_URL + "/auth/user/recruiter", {headers: authHeader()})
   }
 
 const getCompetenceList = () =>{
-    return axios.get(API_URL + "/api/competence", {headers: authHeader()})
+    return axios.get(API_URL + "/api/competence/", {headers: authHeader()})
 }
 
 const userService ={
