@@ -26,7 +26,6 @@ import java.util.List;
 * A RestController does not return any views. It only handles requests and formats responses.
 * It will handle exceptions thrown by methods annotated with @RequestMapping or
 */
-@CrossOrigin(origins = "*")
 @RestController
 public class Restcontroller {
     @Autowired
