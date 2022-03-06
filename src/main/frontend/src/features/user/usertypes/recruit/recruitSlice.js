@@ -16,7 +16,7 @@ export const getCompetenceList = createAsyncThunk('recruit/getCompetence',async 
 
 const initialState = {
   list: null,
-  state: 'idle',
+  status: 'idle',
   errorMsg: ' '
 }
 
@@ -29,12 +29,13 @@ export const recruitSlice = createSlice({
     },
     [getCompetenceList.fulfilled]: (state, action)=>{
       state.status = 'success';
-      state.list = action.payload;
+      state.list = action.payload.data;
     },
     [getCompetenceList.rejected]: (state, action)=>{
     state.status = 'error';
+      state.errorMsg = state.payload.data;
     }
   }
 })
-export const stateSelector = (state) => state;
+export const stateSelector = (state) => state.recruit;
 export default recruitSlice.reducer;

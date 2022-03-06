@@ -41,6 +41,8 @@
     ]
   },
   "devDependencies": {
+    "babel-jest": "^27.5.1",
+    "jest": "^27.5.1",
     "jsdoc": "^3.6.10"
   }
 }

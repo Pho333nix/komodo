@@ -7,10 +7,10 @@
  * */
 import axios from 'axios';
 
-const API_URL = '//localhost:8080/auth';
+const API_URL = 'https://mycorsproxy123.herokuapp.com/https://obscure-tundra-74753.herokuapp.com/auth';
 
 const signUp = async (info) =>{
- const res = await axios.post("//localhost:8080/api/ins", info)
+ const res = await axios.post("https://mycorsproxy123.herokuapp.com/https://obscure-tundra-74753.herokuapp.com/api/ins", info)
     return res.data;
 }
 
