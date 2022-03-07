@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {useSelector, useDispatch } from 'react-redux';
-import { userSelector, logout, personSelector } from '../../UserSlice'
+import { userSelector, logout } from '../../UserSlice'
 import { useNavigate } from 'react-router-dom';
 export function UserRecruit(){
 
