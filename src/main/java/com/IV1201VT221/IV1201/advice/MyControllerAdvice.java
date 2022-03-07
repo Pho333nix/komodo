@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 /**
 * Global exception handling...
 * @ControllerAdvice allows us to handle exceptions globally
@@ -24,6 +26,7 @@ public class MyControllerAdvice {
     * @param  UsernameTakenException a UsernameTakenException object
     * @return                        A ResponseEntity representing the whole HTTP response. 
     */
+    @ResponseBody
     @ExceptionHandler(value = {UsernameTakenException.class})
     public ResponseEntity<String> usernameTakenException(UsernameTakenException e){
         return new ResponseEntity<String>("Username is taken...", HttpStatus.BAD_REQUEST);
@@ -34,6 +37,7 @@ public class MyControllerAdvice {
     * @param  UsernameTakenException a EmailTakenException object
     * @return                        A ResponseEntity representing the whole HTTP response. 
     */
+    @ResponseBody
     @ExceptionHandler(value = {EmailTakenException.class})
     public ResponseEntity <String> emailTakenException(EmailTakenException e){
         return new ResponseEntity<String>("Email is taken", HttpStatus.BAD_REQUEST);
@@ -44,6 +48,7 @@ public class MyControllerAdvice {
     * @param  PnrTakenException a PnrTakenException object
     * @return                   A ResponseEntity representing the whole HTTP response.
     */
+    @ResponseBody
     @ExceptionHandler(value = {PnrTakenException.class})
     public ResponseEntity <String> PnrTakenException(PnrTakenException e){
         return new ResponseEntity<String>("Pnr is taken", HttpStatus.BAD_REQUEST);
@@ -54,6 +59,7 @@ public class MyControllerAdvice {
      * @return                   A ResponseEntity representing which gives a generic message
      */
     @ExceptionHandler(Exception.class)
+    @ResponseBody
     public ResponseEntity <String> genericException(Exception e){
         return new ResponseEntity<String>("Something went wrong :/", HttpStatus.BAD_REQUEST);
     }
