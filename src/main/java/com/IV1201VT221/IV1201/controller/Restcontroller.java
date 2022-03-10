@@ -2,10 +2,7 @@ package com.IV1201VT221.IV1201.controller;
 
 import com.IV1201VT221.IV1201.dao.PersonDao;
 import com.IV1201VT221.IV1201.exceptions.*;
-import com.IV1201VT221.IV1201.model.AuthenticationRequest;
-import com.IV1201VT221.IV1201.model.AuthenticationResponse;
-import com.IV1201VT221.IV1201.model.JwtPerson;
-import com.IV1201VT221.IV1201.model.Person;
+import com.IV1201VT221.IV1201.model.*;
 import com.IV1201VT221.IV1201.service.DatabaseService;
 import com.IV1201VT221.IV1201.service.MyUserDetailsService;
 import com.IV1201VT221.IV1201.util.JwtUtil;
@@ -51,12 +48,43 @@ public class Restcontroller {
     * Returns credentials of a user given a particular username 
     * @param  username The username which credentials is to be retrieved 
     * @return          The credentials retrieved from the database
-    */
+    *//*
     @RequestMapping(value = "/api/cred/{username}", method = RequestMethod.GET)
     public String[] getCred(@PathVariable String username) throws UsernameNotFoundException {
         String[] cred = new String[2];
         cred = databaseservice.getCredentials(username);
         return cred;
+    }*/
+
+    /**
+     * Insert the application into database
+     * @param app to be inserted
+     * @return ok or fail
+     */
+    @RequestMapping(value = "/api/uploadApp", method = RequestMethod.POST)
+    public ResponseEntity<?> uploadCompetence(@RequestBody Application app, @RequestHeader (name="Authorization") String token){
+        String jwtToken = token.substring(7);
+        String email = jwtTokenUtil.extractUsername(jwtToken);
+        String userId;
+        int roleId;
+        try{
+            userId = databaseservice.getUserId(email);
+            roleId = databaseservice.getRoleId(email);
+        }catch(Exception e){
+            logger.error("Unable to get userid");
+            return ResponseEntity.ok("unable to get user");
+        }
+        if(roleId == 2){
+            try{
+                databaseservice.insertApplication(Integer.parseInt(userId), app.getStartDate(), app.getEndDate(), app.getJobs(),
+                        app.getExperience());
+                return ResponseEntity.ok("Uploaded your application successfully");
+            }catch(Exception e){
+                logger.error("unable to insert availability into database");
+                return ResponseEntity.ok("unable to insert availability into db");
+            }
+        }
+        return ResponseEntity.badRequest().body("Unauthorized access, only recruits can access this");
     }
 
     /**

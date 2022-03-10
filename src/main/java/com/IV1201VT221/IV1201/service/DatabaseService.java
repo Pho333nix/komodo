@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.xml.crypto.Data;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -74,6 +75,91 @@ public class DatabaseService {
     }
 
     /**
+     * Returns user id from db connected to the provided username
+     * @param username
+     * @return user id
+     * @throws UsernameNotFoundException
+     */
+    public String getUserId(String username) throws UsernameNotFoundException{
+        try{
+            String id = persondao.getUserId(username);
+            return id;
+        }catch(Exception e){
+            logger.error("this user does not exist");
+            throw new UsernameNotFoundException("");
+        }
+    }
+
+    /**
+     * Insert availability into db for the current person id
+     * @param person_id the personid to identify availability
+     * @param startDate startdate of availablity
+     * @param endDate enddate of availability
+     * @return rows updated
+     * @throws DataNotFoundException
+     */
+    public int updateAvailability(int person_id, String startDate, String endDate) throws DataNotFoundException {
+        Date start = Date.valueOf(startDate);
+        Date end = Date.valueOf(endDate);
+        try{
+            int res = persondao.insertAvailability(person_id, start, end);
+            return res;
+        }catch(Exception e){
+            logger.error("unable to update availability");
+            logger.error("FEL", e);
+            throw new DataNotFoundException("");
+        }
+    }
+
+    /**
+     * inserts new competenceprofile to databse for provided person id
+     * @param person_id identifies the person
+     * @param jobs array of jobs
+     * @param years_of_xp array of experience for jobs
+     * @throws DataNotFoundException
+     */
+    public void updateCompetenceProfile(int person_id, String[] jobs, float[] years_of_xp) throws DataNotFoundException {
+        int[] job_ids = new int[3];
+        for(int i = 0; i < jobs.length; i++){
+            try{
+                job_ids[i] = persondao.getCompetenceId(jobs[i]);
+            }catch(Exception e){
+                logger.error("unable to get job id from db");
+                throw new DataNotFoundException("");
+            }
+        }
+        for(int i = 0; i < years_of_xp.length; i++){
+            try{
+                int rows = persondao.insertCompetenceProfile(person_id, job_ids[i], years_of_xp[i]);
+            }catch(Exception e){
+                logger.error("unable to insert competence profiel");
+                logger.error("FEL", e);
+                throw new DataNotFoundException("");
+            }
+        }
+    }
+
+    /**
+     * Insert application into databse, consists of two steps: inserting availability and inserting
+     * competence profile
+     * @param person_id identifes person
+     * @param startDate startdate for availablity
+     * @param endDate enddate for availablity
+     * @param jobs array of jobs
+     * @param years_of_xp array of experience for the jobs
+     * @throws DataNotFoundException
+     */
+    public void insertApplication(int person_id, String startDate, String endDate, String[] jobs, float[] years_of_xp) throws DataNotFoundException {
+        try{
+            int res = updateAvailability(person_id, startDate, endDate);
+            updateCompetenceProfile(person_id, jobs, years_of_xp);
+        }catch(Exception e){
+            logger.error("could not insert application");
+            throw new DataNotFoundException("");
+        }
+    }
+
+    /**
     * Used for getting credentials from the database relating to a specific person.
     * @param  username of the person we want credentials from
     * @return          the credentials relating to a specific person.
@@ -121,10 +207,20 @@ public class DatabaseService {
         return new Person(name, surname, pnr, mail, password, role, username);
     }
 
+    /**
+     * Get all competences from db in a list
+     * @return list of competences
+     */
     public List<String> getAllCompetence(){
         return persondao.getAllCompetence();
     }
 
+    /**
+     * get role id for a user
+     * @param email String
+     * @return int role id
+     * @throws DataNotFoundException
+     */
     public int getRoleId(String email) throws DataNotFoundException{
         try{
             return persondao.getRoleid(email);
