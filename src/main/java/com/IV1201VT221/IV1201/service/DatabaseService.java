@@ -140,6 +140,25 @@ public class DatabaseService {
     }
 
     /**
+     * calls DAO with dates and retrieves available persons
+     * @param startDate String
+     * @param endDate String
+     * @return List with person ids
+     * @throws DataNotFoundException
+     */
+    public List<Integer> getAvailability(String startDate, String endDate) throws DataNotFoundException {
+        Date fromDate = Date.valueOf(startDate);
+        Date toDate = Date.valueOf(endDate);
+        try{
+            return persondao.getAvailablePersons(fromDate, toDate);
+        }catch(Exception e){
+            logger.error("unable to query availability");
+            throw new DataNotFoundException("");
+        }
+
+    }
+
+    /**
      * Insert application into databse, consists of two steps: inserting availability and inserting
      * competence profile
      * @param person_id identifes person

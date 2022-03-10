@@ -171,6 +171,26 @@ public class PersonDao implements PersonDaoInterface {
         return password;
     }
 
+    /**
+     * get person id that are available in specified timeframe
+     * @param startDate Date
+     * @param endDate Date
+     * @return list of person id
+     */
+    @Override
+    public List<Integer> getAvailablePersons(Date startDate, Date endDate){
+        String sql = "SELECT person_id FROM availability WHERE from_date <= ? AND to_date >= ?";
+        List<Integer> people = jdbcTemplate.query(sql, new Object[] {startDate, endDate},
+                (rs, rowNum) ->
+                        Integer.valueOf(rs.getString("person_id"))
+        );
+        return people;
+    }
+
+    /**
+     * get all competences from db (name of jobs)
+     * @return list of competences
+     */
     @Override
     public List<String> getAllCompetence(){
         String sqlString = "SELECT name FROM competence";
@@ -257,6 +277,8 @@ public class PersonDao implements PersonDaoInterface {
         int id = jdbcTemplate.queryForObject(sql, new Object[] {jobName}, Integer.class);
         return id;
     }
+
+
 
     /**
      * Insert competence profile into db

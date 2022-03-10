@@ -44,17 +44,41 @@ public class Restcontroller {
         this.databaseservice = databaseservice;
     }
 
-    /**
-    * Returns credentials of a user given a particular username 
-    * @param  username The username which credentials is to be retrieved 
-    * @return          The credentials retrieved from the database
-    *//*
+    /*
     @RequestMapping(value = "/api/cred/{username}", method = RequestMethod.GET)
     public String[] getCred(@PathVariable String username) throws UsernameNotFoundException {
         String[] cred = new String[2];
         cred = databaseservice.getCredentials(username);
         return cred;
     }*/
+
+    /**
+     * Get all person ids that are available in the specified time period
+     * @param startDate String
+     * @param endDate String
+     * @return List with person ids
+     */
+    @RequestMapping(value = "/api/available", method = RequestMethod.GET)
+    public ResponseEntity<?> getAvailability(@RequestParam String startDate, String endDate,
+                                             @RequestHeader (name="Authorization") String token){
+        String jwtToken = token.substring(7);
+        String email = jwtTokenUtil.extractUsername(jwtToken);
+        int roleId;
+        try{
+            roleId = databaseservice.getRoleId(email);
+        }catch(Exception e){
+            logger.error("unable to get roleid");
+            return ResponseEntity.ok("unable to get roleid for user");
+        }
+        if(roleId == 1){
+            try{
+                return ResponseEntity.ok(databaseservice.getAvailability(startDate, endDate));
+            }catch(Exception e){
+                return ResponseEntity.ok("unable to get availability");
+            }
+        }
+        return ResponseEntity.badRequest().body("your are not authorized to access this information");
+    }
 
     /**
      * Insert the application into database
