@@ -23,7 +23,7 @@ import java.util.List;
 * A RestController does not return any views. It only handles requests and formats responses.
 * It will handle exceptions thrown by methods annotated with @RequestMapping or
 */
-@CrossOrigin(origins = "*", allowedHeaders = "")
+@CrossOrigin(origins = "https://safe-fjord-62405.herokuapp.com/", allowedHeaders = "")
 @RestController
 public class Restcontroller {
     @Autowired
