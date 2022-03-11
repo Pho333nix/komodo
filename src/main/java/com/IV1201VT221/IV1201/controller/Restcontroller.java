@@ -70,7 +70,7 @@ public class Restcontroller {
             logger.error("unable to get roleid");
             return ResponseEntity.ok("unable to get roleid for user");
         }
-        if(roleId == 1){
+        if(roleId == 1 || roleId == 2){
             try{
                 return ResponseEntity.ok(databaseservice.getAvailability(startDate, endDate));
             }catch(Exception e){
