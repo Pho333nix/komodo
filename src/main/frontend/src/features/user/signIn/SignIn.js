@@ -2,15 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector} from 'react-redux';
 import { signInUser, userSelector } from '../UserSlice'
 import { useNavigate } from 'react-router-dom';
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
 export function SignIn(){
-  const [credentials, setCredentials] = useState({username: ' ', password:' '});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [credentials, setCredentials] = useState({username: '', password:''});
   const [errorMsg, setErrorMsg]=useState('')
 
   const dispatch = useDispatch();
-  const { status, res } = useSelector(userSelector)
+  const { status, res, isLoggedIn } = useSelector(userSelector)
   const navigate = useNavigate();
+
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required("This field is required!"),
+    password: Yup.string().required("This field is required!"),
+  });
+
   const setUserName=(name)=>{
     setCredentials(state =>({...state, username: name}))
   }
@@ -19,35 +26,45 @@ export function SignIn(){
   }
 
   useEffect(()=>{
-    if(status === 'success'){
-      setIsLoggedIn(true);
+    if(isLoggedIn){
       navigate("/UserRecruit")
-      console.log('navigating: ', res);
+      setErrorMsg('')
     }else if(status === 'error'){
-      setErrorMsg(res)
-      setIsLoggedIn(false);
-      console.log(res)
+      setErrorMsg(res.message)
     }
 
   },[errorMsg, isLoggedIn, navigate, res, status])
 
-  const handleSubmit =()=>{
-    dispatch(signInUser(credentials))
+  const handleSubmit =( formValue)=>{
+    const   {username, password } = formValue;
+    dispatch(signInUser( {username, password} ))
+
   }
 
   return(
-<div>
-  <form onSubmit={handleSubmit}>
-    <label>
-      Username:
-      <input type='text'  onChange={(e)=>{setUserName(e.target.value)}}/>
-     </label>
-    <label>
+    <Formik
+      initialValues={credentials}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+<Form>
+    <div>
+      <label htmlFor="username"> Username: </label>
+      <Field name="username" type="text" />
+      <ErrorMessage name="username" className="alert alert-danger"/>
+    </div>
+    <div>
+    <label htmlFor="password">
       password:
-      <input type='text'  onChange={(e)=>{setPassword(e.target.value)}}/>
     </label>
-  </form>
-  <button>Log in</button>
-</div>);
+      <Field type='password'  name="password"/>
+      <ErrorMessage name="password"/>
+    </div>
+  <div>
+    <button type="submit">Log in</button>
+  </div>
+  </Form>
+</Formik>
+  );
 
 }

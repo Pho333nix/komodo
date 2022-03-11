@@ -2,6 +2,8 @@ package com.IV1201VT221.IV1201.service;
 
 import com.IV1201VT221.IV1201.dao.PersonDao;
 import com.IV1201VT221.IV1201.model.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.User;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 public class MyUserDetailsService implements UserDetailsService {
 
     private final PersonDao persondao;
+    Logger logger = LoggerFactory.getLogger(MyUserDetailsService.class);
 
     @Autowired
     public MyUserDetailsService(@Qualifier("postgres") PersonDao persondao){
@@ -30,13 +33,20 @@ public class MyUserDetailsService implements UserDetailsService {
         try{
             cred = getCredentials(username);
         }catch(Exception e){
-            System.out.println(e);
             throw new UsernameNotFoundException("user not found");
         }
         return new User(cred[0], cred[1], new ArrayList<>());
     }
 
-    private String[] getCredentials(String username) throws UsernameNotFoundException, com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException {
-        return persondao.getCredentials(username);
+    private String[] getCredentials(String username) throws com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException {
+        String[] cred = new String[2];
+        try{
+            cred[0] = persondao.getEmail(username);
+            cred[1] = persondao.getUserId(username);
+        }catch(Exception e){
+            logger.error("CREDENTIALS NOT FOUND. USER is not in database: " + username);
+            return null;
+        }
+        return cred;
     }
 }

@@ -1,7 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import homeReducer from '../features/home/homeSlice';
 import userReducer from '../features/user/UserSlice';
-
+import recruitReducer from '../features/user/usertypes/recruit/recruitSlice'
 /**
  *creates and configures the redux store,
  * combines all our reducers
@@ -9,6 +9,12 @@ import userReducer from '../features/user/UserSlice';
 export const store = configureStore({
   reducer: {
     home : homeReducer,
-    user: userReducer
+    user: userReducer,
+    recruit: recruitReducer
   }
+  /*,
+  middleware: getDefaultMiddleware({
+    serializableCheck: false,
+  })
+  */
 });

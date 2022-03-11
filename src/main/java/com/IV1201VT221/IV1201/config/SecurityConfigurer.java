@@ -38,13 +38,21 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     }
 
+    /**
+     * Create amb
+     * @return super
+     * @throws Exception
+     */
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception{
-
         return super.authenticationManagerBean();
     }
 
+    /**
+     * passwordencoder
+     * @return instance of passowordencoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder(){
         return NoOpPasswordEncoder.getInstance();

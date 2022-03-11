@@ -15,10 +15,20 @@ import java.util.function.Function;
 public class JwtUtil {
     private String SECRET_KEY = "secret";
 
+    /**
+     * Extract username from jwt token
+     * @param token token to extract user from
+     * @return username
+     */
     public String extractUsername(String token){
         return extractClaim(token, Claims::getSubject);
     }
 
+    /**
+     * Extract expiration date form jwt token
+     * @param token token to extrac date from
+     * @return expirationdate
+     */
     public Date extractExpiration(String token){
         return extractClaim(token, Claims::getExpiration);
     }
@@ -47,6 +57,12 @@ public class JwtUtil {
                 compact();
     }
 
+    /**
+     * Validate the provided token
+     * @param token token to check
+     * @param userDetails userdetails for token
+     * @return
+     */
     public Boolean validateToken(String token, UserDetails userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));

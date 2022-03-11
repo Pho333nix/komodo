@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-/**
- *
- * */
+import userService from  '../../services/user.service';
+import authService from '../../services/auth.services';
+
+const user = JSON.parse(localStorage.getItem("user"));
+
 export const signUpUser = createAsyncThunk('user/signUpUser',async (obj, thunkAPI) =>{
   try{
-  const res = await axios.post("//localhost:8080/api/ins",obj)
-    return res.data;
+    const res = await authService.signUp(obj);
+    return res;
   }catch(err){
    // throw new Error('user already exists, try signing in or reset account')
       return thunkAPI.rejectWithValue(err)
@@ -15,29 +17,23 @@ export const signUpUser = createAsyncThunk('user/signUpUser',async (obj, thunkAP
 
 export const signInUser = createAsyncThunk('user/signInUser',async(credentials, thunkAPI)=>{
   try{
-    const res = await axios.post('//localhost:8080/auth', credentials)
-    if(res.data.jwt){
-      localStorage.setItem("user", JSON.stringify(res.data))
-      sessionStorage.setItem('jwt', res.data.jwt)
-    }
-    return res.data;
+    const res = await authService.signIn(credentials);
+    return res;
   }catch(err){
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err.response);
   }
 });
 
 /**
- * initial state of the reducer
- */
-const initialState = {
-  userName: ' ',
-  password: ' ',
-  pid: ' ',
-  email: ' ',
-  role: ' ',
-  status: 'idle',
-  res: ' '
-};
+ *  removes the jwt token stored in localStorage
+ * */
+export const logout = createAsyncThunk("user/logout", async() =>{
+  await authService.logout()
+});
+
+const initialState = user ?
+      {isLoggedIn: true, res : user,  status: 'idle'} :
+      {isLoggedIn: false, res: null, status: 'idle'}
 
 /**
  * This function creates userSlice. This function creates
@@ -59,6 +55,7 @@ export const userSlice = createSlice({
       [signUpUser.fulfilled]:(state, action)=>{
         state.status = 'success';
         state.res = action.payload;
+         state.isLoggedIn = false;
       },
       [signUpUser.rejected]:(state, action)=>{
         state.res = action.payload;
@@ -70,14 +67,21 @@ export const userSlice = createSlice({
     [signInUser.fulfilled]:(state, action)=>{
       state.status = 'success';
       state.res = action.payload;
+      state.isLoggedIn = true;
     },
     [signInUser.rejected]:(state, action)=>{
       state.status = 'login failed';
       state.res = action.payload;
+      state.isLoggedIn = false;
     },
+    [logout.fulfilled]: (state, action)=>{
+      state.isLoggedIn = false;
+      state.res = null;
+    }
   }
 });
 
 export const userSelector = (state) => state.user;
+export const personSelector = (state) => state.user.res.person;
 export const { clearState } = userSlice.actions;
 export default userSlice.reducer;
