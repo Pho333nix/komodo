@@ -24,7 +24,7 @@ import java.util.List;
 * It will handle exceptions thrown by methods annotated with @RequestMapping or
 */
 //@CrossOrigin(origins = "https://safe-fjord-62405.herokuapp.com/", allowedHeaders = "")
-@CrossOrigin(origins = "*")
+@CrossOrigin()
 @RestController
 public class Restcontroller {
     @Autowired
@@ -80,7 +80,6 @@ public class Restcontroller {
      * @param app to be inserted
      * @return ok or fail
      */
-    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/api/uploadApp", method = RequestMethod.POST)
     public ResponseEntity<?> uploadCompetence(@RequestBody Application app, @RequestHeader (name="Authorization") String token){
         String jwtToken = token.substring(7);
