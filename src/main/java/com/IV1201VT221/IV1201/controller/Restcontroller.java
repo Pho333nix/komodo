@@ -24,7 +24,7 @@ import java.util.List;
 * It will handle exceptions thrown by methods annotated with @RequestMapping or
 */
 //@CrossOrigin(origins = "https://safe-fjord-62405.herokuapp.com/", allowedHeaders = "")
-@CrossOrigin(origins = "*", allowedHeaders = "")
+@CrossOrigin(origins = "*")
 @RestController
 public class Restcontroller {
     @Autowired
