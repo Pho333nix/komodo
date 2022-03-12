@@ -2,12 +2,10 @@ package com.IV1201VT221.IV1201.dao;
 
 import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
 import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
-import com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException;
 import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
 import com.IV1201VT221.IV1201.model.Person;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
 * PersonDaoInterface for interacting with the database.
@@ -28,5 +26,6 @@ public interface PersonDaoInterface {
     int getPnrCount(String pnr) throws PnrTakenException;
     int getEmailCount(String email) throws EmailTakenException;
     int getUsernameCount(String username) throws UsernameTakenException;
+    Person findPersonByUsername(String username);
     List<String> getAllCompetence();
 }

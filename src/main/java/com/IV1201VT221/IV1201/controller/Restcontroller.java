@@ -17,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.List;
 * It will handle exceptions thrown by methods annotated with @RequestMapping or
 */
 @RestController
+@CrossOrigin(origins = "*")
 public class Restcontroller {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -116,6 +118,7 @@ public class Restcontroller {
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
         try{
+            String asd = new BCryptPasswordEncoder().encode(authenticationRequest.getPassword());
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
                             authenticationRequest.getPassword())
@@ -129,7 +132,7 @@ public class Restcontroller {
         final String jwt = jwtTokenUtil.generateToken(userDetails);
         Person p;
         try{
-            p = databaseservice.getPersonObject(authenticationRequest.getUsername());
+            p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("User not found");
         }

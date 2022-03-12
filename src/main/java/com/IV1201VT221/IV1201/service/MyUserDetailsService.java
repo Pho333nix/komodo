@@ -41,8 +41,8 @@ public class MyUserDetailsService implements UserDetailsService {
     private String[] getCredentials(String username) throws com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException {
         String[] cred = new String[2];
         try{
-            cred[0] = persondao.getEmail(username);
-            cred[1] = persondao.getUserId(username);
+            cred[0] = persondao.getUsername(username);
+            cred[1] = persondao.getPassword(username);
         }catch(Exception e){
             logger.error("CREDENTIALS NOT FOUND. USER is not in database: " + username);
             return null;

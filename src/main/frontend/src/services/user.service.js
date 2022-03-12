@@ -7,7 +7,7 @@
  */
 import axios from 'axios';
 import authHeader from './auth-headers';
-const API_URL = 'https://mycorsproxy123.herokuapp.com/https://obscure-tundra-74753.herokuapp.com';
+const API_URL = 'http://localhost:8080';
 
   const getRecruitPage = ()=> {
     return axios.get(API_URL + "/auth/user/recruit", {headers: authHeader()})
