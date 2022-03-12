@@ -10,6 +10,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -35,7 +38,7 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Counts the number of same pnr in db
-     * @param pnr
+     * @param pnr String
      * @return number of same pnr
      * @throws PnrTakenException
      */
@@ -49,6 +52,7 @@ public class PersonDao implements PersonDaoInterface {
     /**
      * Counts the number of same emails in db
      * @param username
+     * @param email String
      * @return number of emails that match
      * @throws EmailTakenException
      */
@@ -61,7 +65,7 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Counts the number of same usernames in db
-     * @param username
+     * @param username String
      * @return the number of same usernames
      * @throws UsernameTakenException
      */
@@ -74,14 +78,14 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Inserts a person object into the db
-     * @param name
-     * @param surname
-     * @param pnr
-     * @param email
-     * @param password
-     * @param role_id
-     * @param username
-     * @return
+     * @param name String
+     * @param surname String
+     * @param pnr String
+     * @param email String
+     * @param password String
+     * @param role_id int
+     * @param username String
+     * @return int
      */
     @Override
     public int insertPerson(String name, String surname, String pnr, String email, String password,
@@ -95,8 +99,8 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Not used
-     * @param id
-     * @param person
+     * @param id int
+     * @param person Person
      * @return
      */
     @Override
@@ -106,8 +110,8 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Not used
-     * @param id
-     * @param person
+     * @param id int
+     * @param person Person
      * @return
      */
     @Override
@@ -118,6 +122,7 @@ public class PersonDao implements PersonDaoInterface {
     /**
      * Return a name from the db that has given email
      * @param username
+     * @param email string
      * @return name
      */
     @Override
@@ -130,6 +135,7 @@ public class PersonDao implements PersonDaoInterface {
     /**
      * Get pnr from db that has matching email
      * @param username
+     * @param email string
      * @return pnr
      */
     @Override
@@ -142,6 +148,7 @@ public class PersonDao implements PersonDaoInterface {
     /**
      * Get surname that has matching email
      * @param username
+     * @param email string
      * @return surname
      */
     @Override
@@ -154,6 +161,7 @@ public class PersonDao implements PersonDaoInterface {
     /**
      * Get password that has matching email
      * @param username
+     * @param email string
      * @return password
      */
     @Override
@@ -163,6 +171,26 @@ public class PersonDao implements PersonDaoInterface {
         return password;
     }
 
+    /**
+     * get person id that are available in specified timeframe
+     * @param startDate Date
+     * @param endDate Date
+     * @return list of person id
+     */
+    @Override
+    public List<Integer> getAvailablePersons(Date startDate, Date endDate){
+        String sql = "SELECT person_id FROM availability WHERE from_date <= ? AND to_date >= ?";
+        List<Integer> people = jdbcTemplate.query(sql, new Object[] {startDate, endDate},
+                (rs, rowNum) ->
+                        Integer.valueOf(rs.getString("person_id"))
+        );
+        return people;
+    }
+
+    /**
+     * get all competences from db (name of jobs)
+     * @return list of competences
+     */
     @Override
     public List<String> getAllCompetence(){
         String sqlString = "SELECT name FROM competence";
@@ -178,7 +206,7 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Get username that has matching email
-     * @param email
+     * @param email string
      * @return username
      */
     @Override
@@ -190,7 +218,7 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Get role id for a user that has given email
-     * @param email
+     * @param email string
      * @return role_id
      */
     @Override
@@ -202,7 +230,7 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Get email for a user given the email
-     * @param email
+     * @param email string
      * @return email
      */
     @Override
@@ -215,6 +243,7 @@ public class PersonDao implements PersonDaoInterface {
     /**
      * Get user id for a user that has given email
      * @param username
+     * @param email string
      * @return user_id
      */
     @Override
@@ -243,4 +272,45 @@ public class PersonDao implements PersonDaoInterface {
                 ));
     }
 
+    /**
+     * Insert availability into databse
+     * @param person_id int
+     * @param startDate date
+     * @param endDate date
+     * @return int
+     */
+    @Override
+    public int insertAvailability(int person_id, Date startDate, Date endDate){
+        int rows = jdbcTemplate.update("INSERT INTO availability(person_id, from_date, to_date) " +
+                 "VALUES (?, ?, ?)", person_id, startDate, endDate);
+        return rows;//kolla så den funkar
+    }
+
+    /**
+     * Get the ID for a certain job/competence
+     * @param jobName String
+     * @return int id
+     */
+    @Override
+    public int getCompetenceId(String jobName){
+        String sql = "SELECT competence_id FROM competence WHERE name = ?";
+        int id = jdbcTemplate.queryForObject(sql, new Object[] {jobName}, Integer.class);
+        return id;
+    }
+
+
+
+    /**
+     * Insert competence profile into db
+     * @param person_id int
+     * @param competence_id int
+     * @param years_of_experience float
+     * @return int
+     */
+    @Override
+    public int insertCompetenceProfile(int person_id, int competence_id, float years_of_experience){
+        int rows = jdbcTemplate.update("INSERT INTO competence_profile(person_id, competence_id, years_of_experience) " +
+                "VALUES(?, ?, ?)", person_id, competence_id, years_of_experience);
+        return rows;
+    }
 }

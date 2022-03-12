@@ -5,6 +5,7 @@ import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
 import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
 import com.IV1201VT221.IV1201.model.Person;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public interface PersonDaoInterface {
     String getSurname(String email);
     String getUsername(String email);
     String getPassword(String email);
+    int insertAvailability(int person_id, Date startDate, Date endDate);
     int getRoleid(String email);
     String getUserId(String email);
     int insertPerson(String name, String surname, String pnr, String email, String password,
@@ -28,4 +30,7 @@ public interface PersonDaoInterface {
     int getUsernameCount(String username) throws UsernameTakenException;
     Person findPersonByUsername(String username);
     List<String> getAllCompetence();
+    int getCompetenceId(String jobName);
+    int insertCompetenceProfile(int person_id, int competence_id, float years_of_experience);
+    List<Integer> getAvailablePersons(Date startDate, Date endDate);
 }
