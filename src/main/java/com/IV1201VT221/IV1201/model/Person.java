@@ -30,7 +30,7 @@ public class Person {
     * @param  username that the person has.
     */
     public Person(
-            @JsonProperty("name") String name,
+           @JsonProperty("name") String name,
             @JsonProperty("surname") String surname,
             @JsonProperty("pnr") String pnr,
             @JsonProperty("email") String email,

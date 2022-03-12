@@ -24,7 +24,6 @@ import java.util.List;
 * A RestController does not return any views. It only handles requests and formats responses.
 * It will handle exceptions thrown by methods annotated with @RequestMapping or
 */
-@CrossOrigin(origins = "https://safe-fjord-62405.herokuapp.com/", allowedHeaders = "")
 @RestController
 @CrossOrigin(origins = "*")
 public class Restcontroller {
@@ -171,7 +170,6 @@ public class Restcontroller {
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
         try{
-            String asd = new BCryptPasswordEncoder().encode(authenticationRequest.getPassword());
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
                             authenticationRequest.getPassword())

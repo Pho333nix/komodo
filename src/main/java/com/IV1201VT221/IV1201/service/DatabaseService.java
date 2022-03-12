@@ -65,7 +65,7 @@ public class DatabaseService {
         }
         try{
             String encodedPassword = this.passwordEncoder.encode(password);
-            return persondao.insertPerson(name, surname, pnr, email, encodedPassword, 1, username);
+            return persondao.insertPerson(name, surname, pnr, email, encodedPassword, role_id, username);
         }catch(Exception e){
             logger.error("Could not add person to database, check connection");
             return 0;

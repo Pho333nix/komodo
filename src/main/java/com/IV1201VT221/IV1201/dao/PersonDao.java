@@ -222,9 +222,9 @@ public class PersonDao implements PersonDaoInterface {
      * @return role_id
      */
     @Override
-    public int getRoleid(String email){
-        String sqlString = "SELECT role_id FROM person WHERE email = ?";
-        int role = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, Integer.class);
+    public int getRoleid(String username){
+        String sqlString = "SELECT role_id FROM person WHERE username = ?";
+        int role = jdbcTemplate.queryForObject(sqlString, new Object[] {username}, Integer.class);
         return role;
     }
 
