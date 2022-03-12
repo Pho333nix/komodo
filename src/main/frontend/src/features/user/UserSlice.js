@@ -20,7 +20,7 @@ export const signInUser = createAsyncThunk('user/signInUser',async(credentials, 
     const res = await authService.signIn(credentials);
     return res;
   }catch(err){
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err.response);
   }
 });
 
