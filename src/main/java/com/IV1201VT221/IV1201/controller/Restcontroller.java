@@ -23,6 +23,7 @@ import java.util.List;
 * A RestController does not return any views. It only handles requests and formats responses.
 * It will handle exceptions thrown by methods annotated with @RequestMapping or
 */
+@CrossOrigin(origins = "https://safe-fjord-62405.herokuapp.com/", allowedHeaders = "")
 @RestController
 public class Restcontroller {
     @Autowired
@@ -44,13 +45,6 @@ public class Restcontroller {
         this.databaseservice = databaseservice;
     }
 
-    /*
-    @RequestMapping(value = "/api/cred/{username}", method = RequestMethod.GET)
-    public String[] getCred(@PathVariable String username) throws UsernameNotFoundException {
-        String[] cred = new String[2];
-        cred = databaseservice.getCredentials(username);
-        return cred;
-    }*/
 
     /**
      * Get all person ids that are available in the specified time period
@@ -67,7 +61,7 @@ public class Restcontroller {
         try{
             roleId = databaseservice.getRoleId(email);
         }catch(Exception e){
-            logger.error("unable to get roleid");
+            logger.error("unable to get roleid", e);
             return ResponseEntity.ok("unable to get roleid for user");
         }
         if(roleId == 1){
@@ -95,7 +89,7 @@ public class Restcontroller {
             userId = databaseservice.getUserId(email);
             roleId = databaseservice.getRoleId(email);
         }catch(Exception e){
-            logger.error("Unable to get userid");
+            logger.error("Unable to get userid", e);
             return ResponseEntity.ok("unable to get user");
         }
         if(roleId == 2){
@@ -104,7 +98,7 @@ public class Restcontroller {
                         app.getExperience());
                 return ResponseEntity.ok("Uploaded your application successfully");
             }catch(Exception e){
-                logger.error("unable to insert availability into database");
+                logger.error("unable to insert availability into database", e);
                 return ResponseEntity.ok("unable to insert availability into db");
             }
         }
@@ -123,14 +117,14 @@ public class Restcontroller {
         try{
             roleId = databaseservice.getRoleId(email);
         }catch(Exception e){
-            logger.error("user not in db/controller");
+            logger.error("user not in db/controller", e);
             return ResponseEntity.badRequest().body("user does not exist");
         }
         if(roleId == 2){
             try{
                 return ResponseEntity.ok(databaseservice.getAllCompetence());
             }catch(Exception e){
-                logger.error("Error accessing competences");
+                logger.error("Error accessing competences", e);
                 return ResponseEntity.badRequest().body("Could not get competence");
             }
         }else{
