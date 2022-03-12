@@ -80,6 +80,7 @@ public class Restcontroller {
      * @param app to be inserted
      * @return ok or fail
      */
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/api/uploadApp", method = RequestMethod.POST)
     public ResponseEntity<?> uploadCompetence(@RequestBody Application app, @RequestHeader (name="Authorization") String token){
         String jwtToken = token.substring(7);
