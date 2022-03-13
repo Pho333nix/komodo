@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.xml.crypto.Data;
 import java.sql.Date;
@@ -99,7 +100,7 @@ public class DatabaseService {
      * @return rows updated
      * @throws DataNotFoundException
      */
-    @Transactional
+    @Transactional(rollbackFor = {DataNotFoundException.class})
     public int updateAvailability(int person_id, String startDate, String endDate) throws DataNotFoundException {
         Date start = Date.valueOf(startDate);
         Date end = Date.valueOf(endDate);
@@ -178,13 +179,14 @@ public class DatabaseService {
      * @param years_of_xp array of experience for the jobs
      * @throws DataNotFoundException
      */
-    @Transactional
+    @Transactional(rollbackFor = {DataNotFoundException.class})
     public void insertApplication(int person_id, String startDate, String endDate, String[] jobs, float[] years_of_xp) throws DataNotFoundException {
         try{
             int res = updateAvailability(person_id, startDate, endDate);
             updateCompetenceProfile(person_id, jobs, years_of_xp);
         }catch(Exception e){
             logger.error("could not insert application");
+            logger.error("rollaback", TransactionAspectSupport.currentTransactionStatus().toString());
             throw new DataNotFoundException("");
         }
     }
