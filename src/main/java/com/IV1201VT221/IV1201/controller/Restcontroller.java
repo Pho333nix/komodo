@@ -69,6 +69,7 @@ public class Restcontroller {
             try{
                 return ResponseEntity.ok(databaseservice.getAvailability(startDate, endDate));
             }catch(Exception e){
+                logger.error("unable to get availabilit", e);
                 return ResponseEntity.badRequest().body("unable to get availability");
             }
         }
@@ -170,10 +171,15 @@ public class Restcontroller {
         }catch(BadCredentialsException e){
             throw new Exception("incorrect credentials", e);
         }
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(
-                authenticationRequest.getUsername()
-        );
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
+        final String jwt;
+        try{
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(
+                    authenticationRequest.getUsername());
+            jwt = jwtTokenUtil.generateToken(userDetails);
+        }catch(Exception e){
+            logger.error("could not find user", e);
+            return ResponseEntity.badRequest().body("user not found");
+        }
         Person p;
         try{
             p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
