@@ -63,13 +63,13 @@ public class Restcontroller {
             roleId = databaseservice.getRoleId(email);
         }catch(Exception e){
             logger.error("unable to get roleid", e);
-            return ResponseEntity.ok("unable to get roleid for user");
+            return ResponseEntity.badRequest().body("unable to get roleid for user");
         }
         if(roleId == 1){
             try{
                 return ResponseEntity.ok(databaseservice.getAvailability(startDate, endDate));
             }catch(Exception e){
-                return ResponseEntity.ok("unable to get availability");
+                return ResponseEntity.badRequest().body("unable to get availability");
             }
         }
         return ResponseEntity.badRequest().body("your are not authorized to access this information");
