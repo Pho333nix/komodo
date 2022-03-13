@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.crypto.Data;
 import java.sql.Date;
@@ -96,6 +97,7 @@ public class DatabaseService {
      * @return rows updated
      * @throws DataNotFoundException
      */
+    @Transactional
     public int updateAvailability(int person_id, String startDate, String endDate) throws DataNotFoundException {
         Date start = Date.valueOf(startDate);
         Date end = Date.valueOf(endDate);
@@ -116,6 +118,7 @@ public class DatabaseService {
      * @param years_of_xp array of experience for jobs
      * @throws DataNotFoundException
      */
+    @Transactional
     public void updateCompetenceProfile(int person_id, String[] jobs, float[] years_of_xp) throws DataNotFoundException {
         int[] job_ids = new int[3];
         for(int i = 0; i < jobs.length; i++){
@@ -166,6 +169,7 @@ public class DatabaseService {
      * @param years_of_xp array of experience for the jobs
      * @throws DataNotFoundException
      */
+    @Transactional
     public void insertApplication(int person_id, String startDate, String endDate, String[] jobs, float[] years_of_xp) throws DataNotFoundException {
         try{
             int res = updateAvailability(person_id, startDate, endDate);
