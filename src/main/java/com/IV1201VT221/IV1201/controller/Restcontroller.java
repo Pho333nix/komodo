@@ -140,8 +140,13 @@ public class Restcontroller {
     * @return        A integer representing if the insertion was successful or not. 
     */
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
-    public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
+    public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException, DataNotFoundException {
         return databaseservice.insertPerson(person);
+        /*try{
+            return databaseservice.insertPerson(person);
+        }catch(Exception e){
+            throw new UsernameTakenException("User exists");
+        }*/
     }
 
     /**
@@ -170,7 +175,7 @@ public class Restcontroller {
             );
         }catch(BadCredentialsException e){
             logger.error("badcred ", e);
-            return ResponseEntity.badRequest().body("user does not exist");
+            return ResponseEntity.badRequest().body("User not found");
         }
         final String jwt;
         try{

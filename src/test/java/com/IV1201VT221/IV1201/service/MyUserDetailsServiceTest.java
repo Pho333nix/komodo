@@ -1,10 +1,7 @@
 package com.IV1201VT221.IV1201.service;
 
 import com.IV1201VT221.IV1201.dao.PersonDao;
-import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
-import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
-import com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException;
-import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
+import com.IV1201VT221.IV1201.exceptions.*;
 import com.IV1201VT221.IV1201.model.Person;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,7 @@ class MyUserDetailsServiceTest {
     @Test
     @Transactional
     @Rollback(true)
-    void getCredentials() throws PnrTakenException, EmailTakenException, UsernameTakenException, UsernameNotFoundException {
+    void getCredentials() throws PnrTakenException, EmailTakenException, UsernameTakenException, UsernameNotFoundException, DataNotFoundException {
         //given
         Person person = new Person("Faiz", "Faizson", "123456789-1234", "email", "password", 1,"f");
         String expectedUsername = "email";

@@ -46,7 +46,7 @@ public class DatabaseService {
     * @param  person to be inserted 
     * @return        An integer representing if the insertion was successful or now 
     */
-    public int insertPerson(Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
+    public int insertPerson(Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException, DataNotFoundException {
         String name = person.getName();
         String surname = person.getSurname();
         String pnr = person.getPnr();
@@ -72,7 +72,7 @@ public class DatabaseService {
             return persondao.insertPerson(name, surname, pnr, email, encodedPassword, role_id, username);
         }catch(Exception e){
             logger.error("Could not add person to database, check connection");
-            return 0;
+            throw new DataNotFoundException("");
         }
     }
 

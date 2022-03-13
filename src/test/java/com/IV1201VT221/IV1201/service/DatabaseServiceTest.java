@@ -23,7 +23,7 @@ class DatabaseServiceTest {
     @Test
     @Transactional
     @Rollback(true)
-    void insertPerson() throws PnrTakenException, EmailTakenException, UsernameTakenException {
+    void insertPerson() throws PnrTakenException, EmailTakenException, UsernameTakenException, DataNotFoundException {
         //given
         Person person = new Person("Faiz", "Faizson", "123456789-1234", "email", "password", 1,"f");
         //when
@@ -35,7 +35,7 @@ class DatabaseServiceTest {
     @Test
     @Transactional
     @Rollback(true)
-    void insertPersonUsernameTakenException() throws PnrTakenException, EmailTakenException, UsernameTakenException {
+    void insertPersonUsernameTakenException() throws PnrTakenException, EmailTakenException, UsernameTakenException, DataNotFoundException {
         //given
         Person person = new Person("Faiz", "Faizson", "123456789-1234", "email", "password", 1,"f");
         Person otherPerson = new Person("SomeoneElse", "else", "12345", "email3", "password3", 1,"f");
@@ -51,7 +51,7 @@ class DatabaseServiceTest {
     @Test
     @Transactional
     @Rollback(true)
-    void insertPersonEmailTakenException() throws PnrTakenException, EmailTakenException, UsernameTakenException {
+    void insertPersonEmailTakenException() throws PnrTakenException, EmailTakenException, UsernameTakenException, DataNotFoundException {
         //given
         Person person = new Person("Faiz", "Faizson", "123456789-1234", "email", "password", 1,"f");
         Person otherPerson = new Person("SomeoneElse", "else", "12345", "email", "password3", 1,"username");
@@ -67,7 +67,7 @@ class DatabaseServiceTest {
     @Test
     @Transactional
     @Rollback(true)
-    void insertPersonPnrTakenException() throws PnrTakenException, EmailTakenException, UsernameTakenException {
+    void insertPersonPnrTakenException() throws PnrTakenException, EmailTakenException, UsernameTakenException, DataNotFoundException {
         //given
         Person person = new Person("Faiz", "Faizson", "123456789-1234", "email", "password", 1,"f");
         Person otherPerson = new Person("SomeoneElse", "else", "123456789-1234", "email3", "password3", 1,"asd");
