@@ -169,7 +169,8 @@ public class Restcontroller {
                             authenticationRequest.getPassword())
             );
         }catch(BadCredentialsException e){
-            throw new Exception("incorrect credentials", e);
+            logger.error("badcred ", e);
+            return ResponseEntity.badRequest().body("user does not exist");
         }
         final String jwt;
         try{
@@ -184,6 +185,7 @@ public class Restcontroller {
         try{
             p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
         }catch(Exception e){
+            logger.error("ERROR");
             return ResponseEntity.badRequest().body("User not found");
         }
         return ResponseEntity.ok(new JwtPerson(jwt, p));
