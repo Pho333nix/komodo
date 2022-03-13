@@ -1,24 +1,19 @@
 package com.IV1201VT221.IV1201.dao;
 
-import com.IV1201VT221.IV1201.controller.Restcontroller;
 import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
 import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
-import com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException;
 import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
 import com.IV1201VT221.IV1201.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.UUID;
 
 /**
 * Person-Access Object implementing the DaoInterface.
@@ -56,6 +51,7 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Counts the number of same emails in db
+     * @param username
      * @param email String
      * @return number of emails that match
      * @throws EmailTakenException
@@ -125,49 +121,53 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Return a name from the db that has given email
+     * @param username
      * @param email string
      * @return name
      */
     @Override
-    public String getName(String email){
-        String sqlString = "SELECT name FROM person WHERE email = ?";
-        String name = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+    public String getName(String username){
+        String sqlString = "SELECT name FROM person WHERE username = ?";
+        String name = jdbcTemplate.queryForObject(sqlString, new Object[] {username}, String.class);
         return name;
     }
 
     /**
      * Get pnr from db that has matching email
+     * @param username
      * @param email string
      * @return pnr
      */
     @Override
-    public String getPnr(String email){
-        String sqlString = "SELECT pnr FROM person WHERE email = ?";
-        String pnr = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+    public String getPnr(String username){
+        String sqlString = "SELECT pnr FROM person WHERE username = ?";
+        String pnr = jdbcTemplate.queryForObject(sqlString, new Object[] {username}, String.class);
         return pnr;
     }
 
     /**
      * Get surname that has matching email
+     * @param username
      * @param email string
      * @return surname
      */
     @Override
-    public String getSurname(String email){
-        String sqlString = "SELECT surname FROM person WHERE email = ?";
-        String surname = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+    public String getSurname(String username){
+        String sqlString = "SELECT surname FROM person WHERE username = ?";
+        String surname = jdbcTemplate.queryForObject(sqlString, new Object[] {username}, String.class);
         return surname;
     }
 
     /**
      * Get password that has matching email
+     * @param username
      * @param email string
      * @return password
      */
     @Override
-    public String getPassword(String email){
-        String sqlString = "SELECT password FROM person WHERE email = ?";
-        String password = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+    public String getPassword(String username){
+        String sqlString = "SELECT password FROM person WHERE username = ?";
+        String password = jdbcTemplate.queryForObject(sqlString, new Object[] {username}, String.class);
         return password;
     }
 
@@ -210,9 +210,9 @@ public class PersonDao implements PersonDaoInterface {
      * @return username
      */
     @Override
-    public String getUsername(String email){
-        String sqlString = "SELECT username FROM person WHERE email = ?";
-        String username = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+    public String getUsername(String uname){
+        String sqlString = "SELECT username FROM person WHERE username = ?";
+        String username = jdbcTemplate.queryForObject(sqlString, new Object[] {uname}, String.class);
         return username;
     }
 
@@ -222,9 +222,9 @@ public class PersonDao implements PersonDaoInterface {
      * @return role_id
      */
     @Override
-    public int getRoleid(String email){
-        String sqlString = "SELECT role_id FROM person WHERE email = ?";
-        int role = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, Integer.class);
+    public int getRoleid(String username){
+        String sqlString = "SELECT role_id FROM person WHERE username = ?";
+        int role = jdbcTemplate.queryForObject(sqlString, new Object[] {username}, Integer.class);
         return role;
     }
 
@@ -242,14 +242,34 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Get user id for a user that has given email
+     * @param username
      * @param email string
      * @return user_id
      */
     @Override
-    public String getUserId(String email){
+    public String getUserId(String username){
         String sql2 = "SELECT person_id FROM person WHERE email = ?";
-        String userId = jdbcTemplate.queryForObject(sql2, new Object[] {email}, String.class);
+        String userId = jdbcTemplate.queryForObject(sql2, new Object[] {username}, String.class);
         return userId;
+    }
+    /**
+     * Find a person by its username
+     * @param username
+     * @return Person objecttt
+     */
+    @Override
+    public Person findPersonByUsername(String username){
+        String sql = "SELECT * FROM person WHERE username = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) ->
+                new Person(
+                        rs.getString("name"),
+                        rs.getString("surname"),
+                        rs.getString("pnr"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getInt("role_id"),
+                        rs.getString("username")
+                ));
     }
 
     /**

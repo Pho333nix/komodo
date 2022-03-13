@@ -25,7 +25,7 @@ public class DatabaseService {
     private final PersonDao persondao;
     Logger logger = LoggerFactory.getLogger(DatabaseService.class);
 
-    PasswordEncoder passwordEncoder;
+    BCryptPasswordEncoder passwordEncoder;
 
     /**
     * Constructor setting persondao object.
@@ -36,7 +36,6 @@ public class DatabaseService {
         this.persondao = persondao;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
-
 
     /**
     * Used for inserting a person into the database
@@ -65,9 +64,8 @@ public class DatabaseService {
             throw new PnrTakenException("");
         }
         try{
-            String encodedPassword = this.passwordEncoder.encode(person.getPassword());
-            person.setPassword(encodedPassword);
-            return persondao.insertPerson(name, surname, pnr, email, password, role_id, username);
+            String encodedPassword = this.passwordEncoder.encode(password);
+            return persondao.insertPerson(name, surname, pnr, email, encodedPassword, role_id, username);
         }catch(Exception e){
             logger.error("Could not add person to database, check connection");
             return 0;
@@ -194,6 +192,22 @@ public class DatabaseService {
         }
         return cred;
     }
+
+    /**
+     * Get all info about a person from db given a username
+     * @param username pointing to a user
+     * @return person object
+     * @throws DataNotFoundException
+     */
+    public Person getPersonObject3(String username) throws DataNotFoundException {
+        try {
+            return persondao.findPersonByUsername(username);
+        }
+        catch(Exception e) {
+            throw new DataNotFoundException("");
+        }
+    }
+
 
     /**
      * Get all info about a person from db given an email

@@ -14,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +25,8 @@ import java.util.List;
 * It will handle exceptions thrown by methods annotated with @RequestMapping or
 */
 //@CrossOrigin(origins = "https://safe-fjord-62405.herokuapp.com/", allowedHeaders = "")
-@CrossOrigin()
 @RestController
+@CrossOrigin(origins = "*")
 public class Restcontroller {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -176,7 +177,7 @@ public class Restcontroller {
         final String jwt = jwtTokenUtil.generateToken(userDetails);
         Person p;
         try{
-            p = databaseservice.getPersonObject(authenticationRequest.getUsername());
+            p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
         }catch(Exception e){
             return ResponseEntity.badRequest().body("User not found");
         }
