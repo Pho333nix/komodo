@@ -147,8 +147,7 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Get surname that has matching email
-     * @param username
-     * @param email string
+     * @param username string
      * @return surname
      */
     @Override
@@ -160,8 +159,7 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Get password that has matching email
-     * @param username
-     * @param email string
+     * @param username string
      * @return password
      */
     @Override
@@ -206,7 +204,7 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Get username that has matching email
-     * @param email string
+     * @param uname string
      * @return username
      */
     @Override
@@ -217,8 +215,19 @@ public class PersonDao implements PersonDaoInterface {
     }
 
     /**
+     * return email based on person_id
+     * @param id int
+     * @return String email
+     */
+    @Override
+    public String getEmailFromId(int id){
+        String sql = "SELECT email FROM person WHERE person_id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[] {id}, String.class);
+    }
+
+    /**
      * Get role id for a user that has given email
-     * @param email string
+     * @param username string
      * @return role_id
      */
     @Override
@@ -243,7 +252,7 @@ public class PersonDao implements PersonDaoInterface {
     /**
      * Get user id for a user that has given email
      * @param username
-     * @param email string
+     *
      * @return user_id
      */
     @Override

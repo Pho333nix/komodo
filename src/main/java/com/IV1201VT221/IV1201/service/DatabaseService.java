@@ -2,6 +2,7 @@ package com.IV1201VT221.IV1201.service;
 
 import com.IV1201VT221.IV1201.dao.PersonDao;
 import com.IV1201VT221.IV1201.exceptions.*;
+import com.IV1201VT221.IV1201.model.Available;
 import com.IV1201VT221.IV1201.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.crypto.Data;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -147,15 +149,22 @@ public class DatabaseService {
      * @return List with person ids
      * @throws DataNotFoundException
      */
-    public List<Integer> getAvailability(String startDate, String endDate) throws DataNotFoundException {
+    public List<Available> getAvailability(String startDate, String endDate) throws DataNotFoundException {
         Date fromDate = Date.valueOf(startDate);
         Date toDate = Date.valueOf(endDate);
+        List<Available> available = new ArrayList<Available>();
         try{
-            return persondao.getAvailablePersons(fromDate, toDate);
+            //return persondao.getAvailablePersons(fromDate, toDate);
+            List<Integer> avail = persondao.getAvailablePersons(fromDate, toDate);
+            for(int id : avail){
+                available.add(new Available(id, persondao.getEmailFromId(id)));
+            }
+            return available;
         }catch(Exception e){
             logger.error("unable to query availability");
             throw new DataNotFoundException("");
         }
+
 
     }
 
