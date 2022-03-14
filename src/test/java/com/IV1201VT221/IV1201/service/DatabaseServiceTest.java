@@ -91,7 +91,7 @@ class DatabaseServiceTest {
         Person person = new Person("Faiz", "Faizson", "123456789-1234", "email", "password", 1,"f");
         databaseService.insertPerson(person);
         //when
-        Person expected = databaseService.getPersonObject("email");
+        Person expected = databaseService.getPersonObject("username");
         //then
         /*assertThat(expected)
                 .usingRecursiveComparison()

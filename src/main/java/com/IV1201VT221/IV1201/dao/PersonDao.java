@@ -244,7 +244,7 @@ public class PersonDao implements PersonDaoInterface {
      */
     @Override
     public String getEmail(String email){
-        String sqlString = "SELECT email FROM person WHERE email = ?";
+        String sqlString = "SELECT email FROM person WHERE username = ?";
         String mail = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
         return mail;
     }

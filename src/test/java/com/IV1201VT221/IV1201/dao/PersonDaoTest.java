@@ -136,7 +136,7 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getName(email);
+        String expected = persondao.getName(username);
         //then
         assertThat(expected).isEqualTo(name);
     }
@@ -156,7 +156,7 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getPnr(email);
+        String expected = persondao.getPnr(username);
         //then
         assertThat(expected).isEqualTo(pnr);
     }
@@ -176,7 +176,7 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getSurname(email);
+        String expected = persondao.getSurname(username);
         //then
         assertThat(expected).isEqualTo(surname);
     }
@@ -202,7 +202,7 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getUsername(email);
+        String expected = persondao.getUsername(username);
         //then
         assertThat(expected).isEqualTo(username);
     }
@@ -222,7 +222,7 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        int expected = persondao.getRoleid(email);
+        int expected = persondao.getRoleid(username);
         //then
         assertThat(expected).isEqualTo(role_id);
     }
@@ -242,7 +242,7 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getEmail(email);
+        String expected = persondao.getEmail(username);
         //then
         assertThat(expected).isEqualTo(email);
     }

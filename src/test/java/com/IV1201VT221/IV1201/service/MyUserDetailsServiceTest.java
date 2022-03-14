@@ -29,7 +29,7 @@ class MyUserDetailsServiceTest {
         String expectedUsername = "email";
         databaseService.insertPerson(person);
         //when
-        String expected[] = databaseService.getCredentials("email");
+        String expected[] = databaseService.getCredentials("f");
         //then
         assertThat(expected[0]).isEqualTo(expectedUsername);
     }
