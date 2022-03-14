@@ -149,13 +149,6 @@ public class Restcontroller {
             logger.error("could not find user", e);
             return ResponseEntity.badRequest().body("user not found");
         }
-        //Person p;
-        /*try{
-            p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
-        }catch(Exception e){
-            logger.error("ERROR");
-            return ResponseEntity.badRequest().body("User not found");
-        }*/
         Person p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
         return ResponseEntity.ok(new JwtPerson(jwt, p));
     }
