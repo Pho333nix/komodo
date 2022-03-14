@@ -46,7 +46,7 @@ For any custom models you may create them here. They should only represent an ob
 Heroku
 
 ### Authentication
-The application uses JWT tokens to keep track of logged in users. The token contains username. This is used to authorize endpoints correctly. 
+The application uses JWT tokens to keep track of logged in users. The token contains username. This is used to authorize endpoints correctly. UserID = 1 is for recruiters and UserId = 2 is for recruits. Make sure to check the userId of a request to an endpoint and allow only the right role. This is done by extracting username from the JWT token from authorization header and then calling the databaseservice to check for roleId for that username.
 
 ### Testing
 Tests are found in the test folder. For frontend tests, see the frontend repo found [here](https://github.com/projekttwelve/fronttheend). Add tests whenever new functionality is created.
