@@ -20,6 +20,10 @@ class DatabaseServiceTest {
     @Autowired
     PersonDao persondao;
 
+    /** * ***
+     * Tests if InsertPerson method works.
+     * We inesert a person and see if it the returns the expected result, which is 1 if it succeeds.
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -32,6 +36,10 @@ class DatabaseServiceTest {
         assertThat(expected).isEqualTo(1);
     }
 
+    /** * ***
+     * Tests if insertPerson will throw a UsernameTakenException
+     * We inesert a person then we insert another person with the same username too see if it triggers.
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -48,6 +56,10 @@ class DatabaseServiceTest {
                 });
     }
 
+    /** * ***
+     * Tests if insertPerson will throw a EmailTakenException
+     * We insert a person then we insert another person with the same email too see if it triggers.
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -64,6 +76,10 @@ class DatabaseServiceTest {
                 });
     }
 
+    /** * ***
+     * Tests if insertPerson will throw a PnrTakenException
+     * We insert a person then we insert another person with the same Pnr too see if it triggers.
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -81,8 +97,10 @@ class DatabaseServiceTest {
     }
 
 
-
-
+    /** * ***
+     * Tests if when we insert a person the getPersonObject3 method will return
+     * a person with the same attributes.
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -91,14 +109,19 @@ class DatabaseServiceTest {
         Person person = new Person("Faiz", "Faizson", "123456789-1234", "email", "password", 1,"f");
         databaseService.insertPerson(person);
         //when
-        Person expected = databaseService.getPersonObject("email");
+        Person expected = databaseService.getPersonObject3("f");
         //then
-        /*assertThat(expected)
+        assertThat(expected)
                 .usingRecursiveComparison()
+                .ignoringFields("password")
                 .isEqualTo(person);
-         */
+
     }
 
+    /** * ***
+     * Tests if UsernameNotFoundException is thrown when
+     * we try to get a username that is not in the database
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -111,4 +134,23 @@ class DatabaseServiceTest {
                     databaseService.getCredentials("akjsdasiqwieijiss");
                 });
     }
+
+    /** * ***
+     * Tests if the right credentials is returned when
+     * trying to get the credentials of a person
+     */
+    @Test
+    @Transactional
+    @Rollback(true)
+    void getCredentials() throws PnrTakenException, EmailTakenException, UsernameTakenException, UsernameNotFoundException {
+        //given
+        Person person = new Person("Faiz", "Faizson", "123456789-1234", "email", "password", 1,"qwerty");
+        String expectedUsername = "email";
+        databaseService.insertPerson(person);
+        //when
+        String expected[] = databaseService.getCredentials("qwerty");
+        //then
+        assertThat(expected[0]).isEqualTo(expectedUsername);
+    }
+
 }

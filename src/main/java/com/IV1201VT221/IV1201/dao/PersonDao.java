@@ -230,25 +230,24 @@ public class PersonDao implements PersonDaoInterface {
 
     /**
      * Get email for a user given the email
-     * @param email string
+     * @param username string
      * @return email
      */
     @Override
-    public String getEmail(String email){
-        String sqlString = "SELECT email FROM person WHERE email = ?";
-        String mail = jdbcTemplate.queryForObject(sqlString, new Object[] {email}, String.class);
+    public String getEmail(String username){
+        String sqlString = "SELECT email FROM person WHERE username = ?";
+        String mail = jdbcTemplate.queryForObject(sqlString, new Object[] {username}, String.class);
         return mail;
     }
 
     /**
      * Get user id for a user that has given email
      * @param username
-     * @param email string
      * @return user_id
      */
     @Override
     public String getUserId(String username){
-        String sql2 = "SELECT person_id FROM person WHERE email = ?";
+        String sql2 = "SELECT person_id FROM person WHERE username = ?";
         String userId = jdbcTemplate.queryForObject(sql2, new Object[] {username}, String.class);
         return userId;
     }

@@ -19,6 +19,11 @@ class PersonDaoTest {
 
     @Autowired
     PersonDao persondao;
+
+    /** * ***
+     * Tests if the insertPerson method works
+     * InsertPerson insert a user into the database.
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -37,6 +42,10 @@ class PersonDaoTest {
         assertThat(expected).isEqualTo(1);
     }
 
+    /** * ***
+     * Tests if the getCredentials method works
+     * getCredentials gets the credentials for a perticular user.
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -58,9 +67,13 @@ class PersonDaoTest {
         //then
         //assertThat(expectedPassword).isEqualTo(password);
         //assertThat(expectedUsername).isEqualTo(username);
-        assertThat(1).isEqualTo(1);
+        //assertThat(1).isEqualTo(1);
     }
 
+    /** * ***
+     * Tests if the getPnrCount method works
+     * getPnrCount gets amount users with the same SSN
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -81,6 +94,10 @@ class PersonDaoTest {
         assertThat(expected).isEqualTo(1);
     }
 
+    /** * ***
+     * Tests if the getEmailCount method works
+     * getEmailCount gets amount users with the same email
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -101,6 +118,10 @@ class PersonDaoTest {
         assertThat(expected).isEqualTo(1);
     }
 
+    /** * ***
+     * Tests if the getUsernameCount method works
+     * getUsernameCount gets amount users with the same username
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -121,6 +142,10 @@ class PersonDaoTest {
         assertThat(expected).isEqualTo(1);
     }
 
+    /** * ***
+     * Tests if the getName method works
+     * getName get the username of a user
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -136,11 +161,15 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getName(email);
+        String expected = persondao.getName(username);
         //then
         assertThat(expected).isEqualTo(name);
     }
 
+    /** * ***
+     * Tests if the getPnr method works
+     * getPnr get the SSN of a user dependdant on username
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -156,11 +185,15 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getPnr(email);
+        String expected = persondao.getPnr(username);
         //then
         assertThat(expected).isEqualTo(pnr);
     }
 
+    /** * ***
+     * Tests if the getSurname method works
+     * getSurname get the surname of a user dependant on username
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -176,7 +209,7 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getSurname(email);
+        String expected = persondao.getSurname(username);
         //then
         assertThat(expected).isEqualTo(surname);
     }
@@ -187,6 +220,10 @@ class PersonDaoTest {
     void getPassword() {
     }
 
+    /** * ***
+     * Tests if the getUsername method works
+     * getUsername gets the username of a user dependant on  a username
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -202,11 +239,15 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getUsername(email);
+        String expected = persondao.getUsername(username);
         //then
         assertThat(expected).isEqualTo(username);
     }
 
+    /** * ***
+     * Tests if the getRoleId method works
+     * getRoleid gets the role_id of a user dependant on  a username
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -222,11 +263,15 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        int expected = persondao.getRoleid(email);
+        int expected = persondao.getRoleid(username);
         //then
         assertThat(expected).isEqualTo(role_id);
     }
 
+    /** * ***
+     * Tests if the getEmail method works
+     * getEmail gets the email of a user dependant on  a email
+     */
     @Test
     @Transactional
     @Rollback(true)
@@ -242,7 +287,7 @@ class PersonDaoTest {
 
         //when
         persondao.insertPerson(name,surname,pnr,email,password,role_id,username);
-        String expected = persondao.getEmail(email);
+        String expected = persondao.getEmail(username);
         //then
         assertThat(expected).isEqualTo(email);
     }

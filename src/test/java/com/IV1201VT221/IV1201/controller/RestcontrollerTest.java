@@ -24,14 +24,17 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.Base64Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +62,12 @@ class RestcontrollerTest {
     @MockBean
     private JwtUtil jwtTokenUtil;
 
+
+    /** * ***
+     * Tests the endpoint which gets the credentials of a user.
+     * When contacting the endpoint with a get-request should
+     * result in the execution of service.getCredentials.
+     */
     @Test
     void getCred() throws Exception {
         //given
@@ -68,7 +77,7 @@ class RestcontrollerTest {
         credentials[1]="username";
 
         //when
-        when(service.getCredentials(name)).thenReturn(credentials);
+        when(service.getCredentials("Faiz")).thenReturn(credentials);
 
         //then
         this.mockMvc
@@ -77,6 +86,11 @@ class RestcontrollerTest {
                 .andExpect(content().string("[\"password\",\"username\"]"));
     }
 
+    /** * ***
+     * Tests the endpoint which inserts a user
+     * When contacting the endpoint with a post-request should
+     * result in the execution of service.inserperson.
+     */
     @Test
     void insertUser() throws Exception {
         //given
@@ -93,7 +107,13 @@ class RestcontrollerTest {
                 .andExpect(content().string("1"));
     }
 
+    /** * ***
+     * Tests the endpoint which geta the competencesj
+     * When contacting the endpoint with a get-request should
+     * result in the execution of service.getAllCompetence.
+     */
     @Test
+    @WithMockUser(username = "test", password = "test", roles = "USER")
     void getCompetence() throws Exception {
         //given
         List<String> competences = new ArrayList();
@@ -106,13 +126,19 @@ class RestcontrollerTest {
         when(service.getAllCompetence()).thenReturn(competences);
 
         //then
-        /*this.mockMvc
-                .perform(get("/api/competence/"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("[\"ticket sales\",\"lotteries\",\"roller coaster operation\"]"));
-         */
+/*        this.mockMvc
+                .perform(get("/api/competence/")
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("user", "secret")))
+                .andExpect(status().isOk());
+                */
+
     }
 
+    /** * ***
+     * Tests the endpoint which get a the person object
+     * When contacting the endpoint with a get-request should
+     * result in the execution of service.getPersonObject.
+     */
     @Test
     void getPersonObject() throws Exception {
         //given
