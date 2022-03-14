@@ -94,19 +94,9 @@ public class Restcontroller {
         int roleId = 0;
         String jwtToken = token.substring(7);
         String email = jwtTokenUtil.extractUsername(jwtToken);
-        try{
-            roleId = databaseservice.getRoleId(email);
-        }catch(Exception e){
-            logger.error("user not in db/controller", e);
-            return ResponseEntity.badRequest().body("user does not exist");
-        }
+        roleId = databaseservice.getRoleId(email);
         if(roleId == 2){
-            try{
-                return ResponseEntity.ok(databaseservice.getAllCompetence());
-            }catch(Exception e){
-                logger.error("Error accessing competences", e);
-                return ResponseEntity.badRequest().body("Could not get competence");
-            }
+            return ResponseEntity.ok(databaseservice.getAllCompetence());
         }else{
             return ResponseEntity.badRequest().body("Unauthorized access");
         }
@@ -159,13 +149,14 @@ public class Restcontroller {
             logger.error("could not find user", e);
             return ResponseEntity.badRequest().body("user not found");
         }
-        Person p;
-        try{
+        //Person p;
+        /*try{
             p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
         }catch(Exception e){
             logger.error("ERROR");
             return ResponseEntity.badRequest().body("User not found");
-        }
+        }*/
+        Person p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
         return ResponseEntity.ok(new JwtPerson(jwt, p));
     }
 }
