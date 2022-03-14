@@ -14,12 +14,21 @@ React with redux
 
 ### Storage
 Postgresql
-
+To connect to the database on Heroku you need to implement some variables in application.property, namely
+```java
+spring.datasource.username=${HEROKU_USERNAME}
+spring.datasource.url=${HEROKU_URL}
+spring.datasource.password=${HEROKU_PASSWORD}
+```
+You can get the variable information from heroku, and then you add them locally.
 ### Cloud
 Heroku
 
 ### Authentication
 The application uses JWT tokens to keep track of logged in users. The token contains username. This is used to authorize endpoints correctly. 
+
+### Testing
+Tests are found in the test folder. For frontend tests, see the frontend repo found [here](https://github.com/projekttwelve/fronttheend)
 
 
 
