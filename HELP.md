@@ -10,7 +10,7 @@ A recruiter can log in, and fetch available people for a specified date.
 Java with spring boot
 
 ### Frontend
-React with redux
+React with redux. See [project](https://github.com/projekttwelve/fronttheend)
 
 ### Storage
 Postgresql
@@ -21,6 +21,27 @@ spring.datasource.url=${HEROKU_URL}
 spring.datasource.password=${HEROKU_PASSWORD}
 ```
 You can get the variable information from heroku, and then you add them locally.
+
+All calls to database from DAO layer. No logic here.
+### Services
+Databaseservices handles all communication with DAO layer. Here you can put all logic and errorhandling from the DAO layer. Endpoints from controller layer go through here.
+### Controller
+This is the accesspoint for users of the application. Specify the address and request method through
+```java
+@RequestMapping(value = "/api/xxx", method = RequestMethod.xxx)
+```
+followed by the method. 
+### Config
+Here you can configure the security of the server. If you wish to have some endpoints being open to the public you can specify those in 
+```java
+protected void configure
+```
+All endpoint NOT listed here will require a valid JWT token in the Authorization header. 
+You get a JWT token from the /auth endpoint with a username/password combo that exists in database.
+### Exception
+Create custom exceptions in this folder to help understand what exception was thrown. Remember to add them into the "MyControllerAdvice" in advice folder. They will automatically be caught in the controller and returned to the user accordingly.
+### Model
+For any custom models you may create them here. They should only represent an object, not do any calls to databases or similar things.
 ### Cloud
 Heroku
 
@@ -28,7 +49,7 @@ Heroku
 The application uses JWT tokens to keep track of logged in users. The token contains username. This is used to authorize endpoints correctly. 
 
 ### Testing
-Tests are found in the test folder. For frontend tests, see the frontend repo found [here](https://github.com/projekttwelve/fronttheend)
+Tests are found in the test folder. For frontend tests, see the frontend repo found [here](https://github.com/projekttwelve/fronttheend). Add tests whenever new functionality is created.
 
 
 
