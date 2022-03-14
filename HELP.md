@@ -1,3 +1,29 @@
+# IV1201
+Project in architecture and design of global applications.
+
+## Description
+The website is hosted @ [website](https://safe-fjord-62405.herokuapp.com/).
+It is a website for recruiters and recruits. A recruit can log in, upload an application with competences and timestamp for availability.
+A recruiter can log in, and fetch available people for a specified date.
+
+### Backend
+Java with spring boot
+
+### Frontend
+React with redux
+
+### Storage
+Postgresql
+
+### Cloud
+Heroku
+
+### Authentication
+The application uses JWT tokens to keep track of logged in users. The token contains username. This is used to authorize endpoints correctly. 
+
+
+
+
 # Getting Started
 
 ### Reference Documentation
