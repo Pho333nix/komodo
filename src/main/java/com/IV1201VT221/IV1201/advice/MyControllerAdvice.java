@@ -53,7 +53,7 @@ public class MyControllerAdvice {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity <String> genericException(Exception e){
-        return new ResponseEntity<String>("ballen", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<String>("Generic exception, something went wrong..", HttpStatus.BAD_REQUEST);
         //return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
