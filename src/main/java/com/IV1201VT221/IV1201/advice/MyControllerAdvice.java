@@ -1,8 +1,6 @@
 package com.IV1201VT221.IV1201.advice;
 
-import com.IV1201VT221.IV1201.exceptions.EmailTakenException;
-import com.IV1201VT221.IV1201.exceptions.PnrTakenException;
-import com.IV1201VT221.IV1201.exceptions.UsernameTakenException;
+import com.IV1201VT221.IV1201.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -55,6 +53,36 @@ public class MyControllerAdvice {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity <String> genericException(Exception e){
-        return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<String>("ballen", HttpStatus.BAD_REQUEST);
+        //return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity <String> dataNotFoundException(DataNotFoundException e){
+        return new ResponseEntity<String>("Could not find data", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InsertApplicationFailedException.class)
+    public ResponseEntity <String> insertApplicationFailedException(InsertApplicationFailedException e){
+        return new ResponseEntity<String>("Could not insert application, check params",
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PasswordNotFoundException.class)
+    public ResponseEntity <String> passwordNotFoundException(PasswordNotFoundException e){
+        return new ResponseEntity<String>("Could not find password",
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InsertCompetenceException.class)
+    public ResponseEntity <String> insertCompetenceException(InsertCompetenceException e){
+        return new ResponseEntity<String>("Could not upload competence profile, check params",
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InsertAvailabilityException.class)
+    public ResponseEntity <String> insertAvailabilityException(InsertAvailabilityException e){
+        return new ResponseEntity<String>("Could not upload availability",
+                HttpStatus.BAD_REQUEST);
     }
 }

@@ -55,23 +55,12 @@ public class Restcontroller {
      */
     @RequestMapping(value = "/api/available", method = RequestMethod.GET)
     public ResponseEntity<?> getAvailability(@RequestParam String startDate, String endDate,
-                                             @RequestHeader (name="Authorization") String token){
+                                             @RequestHeader (name="Authorization") String token) throws DataNotFoundException {
         String jwtToken = token.substring(7);
         String email = jwtTokenUtil.extractUsername(jwtToken);
-        int roleId;
-        try{
-            roleId = databaseservice.getRoleId(email);
-        }catch(Exception e){
-            logger.error("unable to get roleid", e);
-            return ResponseEntity.badRequest().body("unable to get roleid for user");
-        }
+        int roleId = databaseservice.getRoleId(email);
         if(roleId == 1){
-            try{
-                return ResponseEntity.ok(databaseservice.getAvailability(startDate, endDate));
-            }catch(Exception e){
-                logger.error("unable to get availabilit", e);
-                return ResponseEntity.badRequest().body("unable to get availability");
-            }
+            return ResponseEntity.ok(databaseservice.getAvailability(startDate, endDate));
         }
         return ResponseEntity.badRequest().body("your are not authorized to access this information");
     }
@@ -82,28 +71,17 @@ public class Restcontroller {
      * @return ok or fail
      */
     @RequestMapping(value = "/api/uploadApp", method = RequestMethod.POST)
-    public ResponseEntity<?> uploadCompetence(@RequestBody Application app, @RequestHeader (name="Authorization") String token){
+    public ResponseEntity<?> uploadCompetence(@RequestBody Application app, @RequestHeader (name="Authorization") String token) throws DataNotFoundException, UsernameNotFoundException, InsertApplicationFailedException {
         String jwtToken = token.substring(7);
         String email = jwtTokenUtil.extractUsername(jwtToken);
-        String userId;
-        int roleId;
-        try{
-            userId = databaseservice.getUserId(email);
-            roleId = databaseservice.getRoleId(email);
-        }catch(Exception e){
-            logger.error("Unable to get userid", e);
-            return ResponseEntity.ok("unable to get user");
-        }
+        String userId = databaseservice.getUserId(email);
+        int roleId = databaseservice.getRoleId(email);
         if(roleId == 2){
-            try{
-                databaseservice.insertApplication(Integer.parseInt(userId), app.getStartDate(), app.getEndDate(), app.getJobs(),
-                        app.getExperience());
-                return ResponseEntity.ok("Uploaded your application successfully");
-            }catch(Exception e){
-                logger.error("unable to insert availability into database", e);
-                return ResponseEntity.ok("unable to insert availability into db");
-            }
+            databaseservice.insertApplication(Integer.parseInt(userId), app.getStartDate(), app.getEndDate(), app.getJobs(),
+                    app.getExperience());
+            return ResponseEntity.ok("Uploaded your application successfully");
         }
+        logger.info("Access with wrong role");
         return ResponseEntity.badRequest().body("Unauthorized access, only recruits can access this");
     }
 
@@ -142,11 +120,6 @@ public class Restcontroller {
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
     public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException, DataNotFoundException {
         return databaseservice.insertPerson(person);
-        /*try{
-            return databaseservice.insertPerson(person);
-        }catch(Exception e){
-            throw new UsernameTakenException("User exists");
-        }*/
     }
 
     /**

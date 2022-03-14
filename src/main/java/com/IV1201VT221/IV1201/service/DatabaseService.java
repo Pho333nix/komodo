@@ -71,7 +71,7 @@ public class DatabaseService {
             String encodedPassword = this.passwordEncoder.encode(password);
             return persondao.insertPerson(name, surname, pnr, email, encodedPassword, role_id, username);
         }catch(Exception e){
-            logger.error("Could not add person to database, check connection");
+            logger.error("Could not add person to database, check connection", e);
             throw new DataNotFoundException("");
         }
     }
@@ -87,7 +87,7 @@ public class DatabaseService {
             String id = persondao.getUserId(username);
             return id;
         }catch(Exception e){
-            logger.error("this user does not exist");
+            logger.error("this user does not exist", e);
             throw new UsernameNotFoundException("");
         }
     }
@@ -98,19 +98,17 @@ public class DatabaseService {
      * @param startDate startdate of availablity
      * @param endDate enddate of availability
      * @return rows updated
-     * @throws DataNotFoundException
+     * @throws InsertAvailabilityException
      */
-    @Transactional(rollbackFor = {DataNotFoundException.class})
-    public int updateAvailability(int person_id, String startDate, String endDate) throws DataNotFoundException {
+    @Transactional(rollbackFor = {InsertAvailabilityException.class})
+    public int updateAvailability(int person_id, String startDate, String endDate) throws DataNotFoundException, InsertAvailabilityException {
         Date start = Date.valueOf(startDate);
         Date end = Date.valueOf(endDate);
         try{
-            int res = persondao.insertAvailability(person_id, start, end);
-            return res;
+            return persondao.insertAvailability(person_id, start, end);
         }catch(Exception e){
-            logger.error("unable to update availability");
-            logger.error("FEL", e);
-            throw new DataNotFoundException("");
+            logger.error("unable to update availability", e);
+            throw new InsertAvailabilityException("");
         }
     }
 
@@ -121,8 +119,8 @@ public class DatabaseService {
      * @param years_of_xp array of experience for jobs
      * @throws DataNotFoundException
      */
-    @Transactional
-    public void updateCompetenceProfile(int person_id, String[] jobs, float[] years_of_xp) throws DataNotFoundException {
+    @Transactional(rollbackFor = {InsertCompetenceException.class})
+    public void updateCompetenceProfile(int person_id, String[] jobs, float[] years_of_xp) throws DataNotFoundException, InsertCompetenceException {
         int[] job_ids = new int[3];
         for(int i = 0; i < jobs.length; i++){
             try{
@@ -137,8 +135,7 @@ public class DatabaseService {
                 int rows = persondao.insertCompetenceProfile(person_id, job_ids[i], years_of_xp[i]);
             }catch(Exception e){
                 logger.error("unable to insert competence profiel");
-                logger.error("FEL", e);
-                throw new DataNotFoundException("");
+                throw new InsertCompetenceException("");
             }
         }
     }
@@ -177,33 +174,37 @@ public class DatabaseService {
      * @param endDate enddate for availablity
      * @param jobs array of jobs
      * @param years_of_xp array of experience for the jobs
-     * @throws DataNotFoundException
+     * @throws InsertApplicationFailedException
      */
-    @Transactional(rollbackFor = {DataNotFoundException.class})
-    public void insertApplication(int person_id, String startDate, String endDate, String[] jobs, float[] years_of_xp) throws DataNotFoundException {
+    @Transactional(rollbackFor = {InsertApplicationFailedException.class})
+    public void insertApplication(int person_id, String startDate, String endDate, String[] jobs, float[] years_of_xp) throws InsertApplicationFailedException {
         try{
             int res = updateAvailability(person_id, startDate, endDate);
             updateCompetenceProfile(person_id, jobs, years_of_xp);
         }catch(Exception e){
-            logger.error("could not insert application");
-            logger.error("rollaback", TransactionAspectSupport.currentTransactionStatus().toString());
-            throw new DataNotFoundException("");
+            logger.error("could not insert application, rollbacked");
+            throw new InsertApplicationFailedException("");
         }
     }
 
     /**
     * Used for getting credentials from the database relating to a specific person.
     * @param  username of the person we want credentials from
-    * @return          the credentials relating to a specific person.
+    * @return          the credentials relating to a specific person
     */
-    public String[] getCredentials(String username) throws UsernameNotFoundException{
+    public String[] getCredentials(String username) throws UsernameNotFoundException, PasswordNotFoundException {
         String[] cred = new String[2];
         try{
             cred[0] = persondao.getEmail(username);
+        }catch(Exception e){
+            logger.error("username not found");
+            throw new UsernameNotFoundException("");
+        }
+        try{
             cred[1] = persondao.getUserId(username);
         }catch(Exception e){
-            logger.error("CREDENTIALS NOT FOUND");
-            throw new UsernameNotFoundException("");
+            logger.error("password not found");
+            throw new PasswordNotFoundException("");
         }
         return cred;
     }
@@ -219,6 +220,7 @@ public class DatabaseService {
             return persondao.findPersonByUsername(username);
         }
         catch(Exception e) {
+            logger.error("could not find person");
             throw new DataNotFoundException("");
         }
     }
@@ -258,9 +260,15 @@ public class DatabaseService {
     /**
      * Get all competences from db in a list
      * @return list of competences
+     * @throws DataNotFoundException
      */
-    public List<String> getAllCompetence(){
-        return persondao.getAllCompetence();
+    public List<String> getAllCompetence() throws DataNotFoundException {
+        try{
+            return persondao.getAllCompetence();
+        }catch(Exception e){
+            logger.error("could not get competences");
+            throw new DataNotFoundException("");
+        }
     }
 
     /**

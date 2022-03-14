@@ -23,7 +23,7 @@ class MyUserDetailsServiceTest {
     @Test
     @Transactional
     @Rollback(true)
-    void getCredentials() throws PnrTakenException, EmailTakenException, UsernameTakenException, UsernameNotFoundException, DataNotFoundException {
+    void getCredentials() throws PnrTakenException, EmailTakenException, UsernameTakenException, UsernameNotFoundException, DataNotFoundException, PasswordNotFoundException {
         //given
         Person person = new Person("Faiz", "Faizson", "123456789-1234", "email", "password", 1,"f");
         String expectedUsername = "email";
