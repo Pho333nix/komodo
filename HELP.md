@@ -24,7 +24,7 @@ You can get the variable information from heroku, and then you add them locally.
 
 All calls to database from DAO layer. No logic here.
 ### Services
-Databaseservices handles all communication with DAO layer. Here you can put all logic and errorhandling from the DAO layer. Endpoints from controller layer go through here.
+Databaseservices handles all communication with DAO layer. Here you can put all logic and errorhandling from the DAO layer. Endpoints from controller layer go through here. This layer may expand upon adding new functionality.
 ### Controller
 This is the accesspoint for users of the application. Specify the address and request method through
 ```java
@@ -36,20 +36,20 @@ Here you can configure the security of the server. If you wish to have some endp
 ```java
 protected void configure
 ```
-All endpoint NOT listed here will require a valid JWT token in the Authorization header. 
+All endpoints NOT listed here will require a valid JWT token in the Authorization header. 
 You get a JWT token from the /auth endpoint with a username/password combo that exists in database.
 ### Exception
 Create custom exceptions in this folder to help understand what exception was thrown. Remember to add them into the "MyControllerAdvice" in advice folder. They will automatically be caught in the controller and returned to the user accordingly.
 ### Model
 For any custom models you may create them here. They should only represent an object, not do any calls to databases or similar things.
 ### Cloud
-Heroku
+Heroku. The database dashboard can be found [here](https://data.heroku.com/datastores/b2912fb3-000b-4e67-86a3-12e63a9afb2e). Here you can create dataclips to query data from the database. For developing it might be easier to run it locally until you get a feel for how it works.
 
 ### Authentication
 The application uses JWT tokens to keep track of logged in users. The token contains username. This is used to authorize endpoints correctly. UserID = 1 is for recruiters and UserId = 2 is for recruits. Make sure to check the userId of a request to an endpoint and allow only the right role. This is done by extracting username from the JWT token from authorization header and then calling the databaseservice to check for roleId for that username.
 
 ### Testing
-Tests are found in the test folder. For frontend tests, see the frontend repo found [here](https://github.com/projekttwelve/fronttheend). Add tests whenever new functionality is created.
+Tests are found in the test folder. For frontend tests, see the frontend repo found [here](https://github.com/projekttwelve/fronttheend). Add tests whenever new functionality is created. Current tests do not use a mock database but the live one. 
 
 
 
