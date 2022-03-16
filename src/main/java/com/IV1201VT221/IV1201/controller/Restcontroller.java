@@ -55,22 +55,12 @@ public class Restcontroller {
      */
     @RequestMapping(value = "/api/available", method = RequestMethod.GET)
     public ResponseEntity<?> getAvailability(@RequestParam String startDate, String endDate,
-                                             @RequestHeader (name="Authorization") String token){
+                                             @RequestHeader (name="Authorization") String token) throws DataNotFoundException {
         String jwtToken = token.substring(7);
         String email = jwtTokenUtil.extractUsername(jwtToken);
-        int roleId;
-        try{
-            roleId = databaseservice.getRoleId(email);
-        }catch(Exception e){
-            logger.error("unable to get roleid", e);
-            return ResponseEntity.ok("unable to get roleid for user");
-        }
+        int roleId = databaseservice.getRoleId(email);
         if(roleId == 1){
-            try{
-                return ResponseEntity.ok(databaseservice.getAvailability(startDate, endDate));
-            }catch(Exception e){
-                return ResponseEntity.ok("unable to get availability");
-            }
+            return ResponseEntity.ok(databaseservice.getAvailability(startDate, endDate));
         }
         return ResponseEntity.badRequest().body("your are not authorized to access this information");
     }
@@ -81,28 +71,17 @@ public class Restcontroller {
      * @return ok or fail
      */
     @RequestMapping(value = "/api/uploadApp", method = RequestMethod.POST)
-    public ResponseEntity<?> uploadCompetence(@RequestBody Application app, @RequestHeader (name="Authorization") String token){
+    public ResponseEntity<?> uploadCompetence(@RequestBody Application app, @RequestHeader (name="Authorization") String token) throws DataNotFoundException, UsernameNotFoundException, InsertApplicationFailedException {
         String jwtToken = token.substring(7);
         String email = jwtTokenUtil.extractUsername(jwtToken);
-        String userId;
-        int roleId;
-        try{
-            userId = databaseservice.getUserId(email);
-            roleId = databaseservice.getRoleId(email);
-        }catch(Exception e){
-            logger.error("Unable to get userid", e);
-            return ResponseEntity.ok("unable to get user");
-        }
+        String userId = databaseservice.getUserId(email);
+        int roleId = databaseservice.getRoleId(email);
         if(roleId == 2){
-            try{
-                databaseservice.insertApplication(Integer.parseInt(userId), app.getStartDate(), app.getEndDate(), app.getJobs(),
-                        app.getExperience());
-                return ResponseEntity.ok("Uploaded your application successfully");
-            }catch(Exception e){
-                logger.error("unable to insert availability into database", e);
-                return ResponseEntity.ok("unable to insert availability into db");
-            }
+            databaseservice.insertApplication(Integer.parseInt(userId), app.getStartDate(), app.getEndDate(), app.getJobs(),
+                    app.getExperience());
+            return ResponseEntity.ok("Uploaded your application successfully");
         }
+        logger.info("Access with wrong role");
         return ResponseEntity.badRequest().body("Unauthorized access, only recruits can access this");
     }
 
@@ -115,19 +94,9 @@ public class Restcontroller {
         int roleId = 0;
         String jwtToken = token.substring(7);
         String email = jwtTokenUtil.extractUsername(jwtToken);
-        try{
-            roleId = databaseservice.getRoleId(email);
-        }catch(Exception e){
-            logger.error("user not in db/controller", e);
-            return ResponseEntity.badRequest().body("user does not exist");
-        }
+        roleId = databaseservice.getRoleId(email);
         if(roleId == 2){
-            try{
-                return ResponseEntity.ok(databaseservice.getAllCompetence());
-            }catch(Exception e){
-                logger.error("Error accessing competences", e);
-                return ResponseEntity.badRequest().body("Could not get competence");
-            }
+            return ResponseEntity.ok(databaseservice.getAllCompetence());
         }else{
             return ResponseEntity.badRequest().body("Unauthorized access");
         }
@@ -139,7 +108,7 @@ public class Restcontroller {
     * @return        A integer representing if the insertion was successful or not. 
     */
     @RequestMapping(value = "/api/ins", method = RequestMethod.POST)
-    public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException {
+    public int insertUser(@RequestBody Person person) throws PnrTakenException, EmailTakenException, UsernameTakenException, DataNotFoundException {
         return databaseservice.insertPerson(person);
     }
 
@@ -168,18 +137,19 @@ public class Restcontroller {
                             authenticationRequest.getPassword())
             );
         }catch(BadCredentialsException e){
-            throw new Exception("incorrect credentials", e);
-        }
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(
-                authenticationRequest.getUsername()
-        );
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
-        Person p;
-        try{
-            p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
-        }catch(Exception e){
+            logger.error("badcred ", e);
             return ResponseEntity.badRequest().body("User not found");
         }
+        final String jwt;
+        try{
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(
+                    authenticationRequest.getUsername());
+            jwt = jwtTokenUtil.generateToken(userDetails);
+        }catch(Exception e){
+            logger.error("could not find user", e);
+            return ResponseEntity.badRequest().body("user not found");
+        }
+        Person p = databaseservice.getPersonObject3(authenticationRequest.getUsername());
         return ResponseEntity.ok(new JwtPerson(jwt, p));
     }
 }

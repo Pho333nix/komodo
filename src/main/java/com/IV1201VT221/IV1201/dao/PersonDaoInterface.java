@@ -33,4 +33,5 @@ public interface PersonDaoInterface {
     int getCompetenceId(String jobName);
     int insertCompetenceProfile(int person_id, int competence_id, float years_of_experience);
     List<Integer> getAvailablePersons(Date startDate, Date endDate);
+    public String getEmailFromId(int id);
 }

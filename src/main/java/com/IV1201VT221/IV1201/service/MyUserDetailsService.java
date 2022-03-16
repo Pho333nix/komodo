@@ -32,10 +32,11 @@ public class MyUserDetailsService implements UserDetailsService {
         String[] cred = new String[2];
         try{
             cred = getCredentials(username);
+            return new User(cred[0], cred[1], new ArrayList<>());
         }catch(Exception e){
             throw new UsernameNotFoundException("user not found");
         }
-        return new User(cred[0], cred[1], new ArrayList<>());
+        //return new User(cred[0], cred[1], new ArrayList<>());
     }
 
     private String[] getCredentials(String username) throws com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException {
@@ -43,10 +44,11 @@ public class MyUserDetailsService implements UserDetailsService {
         try{
             cred[0] = persondao.getUsername(username);
             cred[1] = persondao.getPassword(username);
+            return cred;
         }catch(Exception e){
             logger.error("CREDENTIALS NOT FOUND. USER is not in database: " + username);
-            return null;
+            throw new com.IV1201VT221.IV1201.exceptions.UsernameNotFoundException("");
         }
-        return cred;
+        //return cred;
     }
 }
